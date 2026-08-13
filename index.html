@@ -1791,7 +1791,7 @@
       });
     }
 
-    function loadGroupsData() {
+function loadGroupsData() {
       Papa.parse(GROUPS_CSV_URL, {
         download: true, 
         header: false,
@@ -1804,10 +1804,9 @@
           }
 
           const rawData = results.data;
-          window.globalGroupData = {}; // 讓資料變成全域變數，相機彈窗才讀得到！
+          window.globalGroupData = {}; 
           const grouped = window.globalGroupData;
           let currentGroupName = null;
-          let memberIndex = 0; 
 
           for (let i = 0; i < rawData.length; i++) {
             const row = rawData[i];
@@ -1815,33 +1814,83 @@
             const col1 = row[1] ? row[1].trim() : ''; 
             const col2 = row[2] ? row[2].trim() : ''; 
             
-            if (col0.toLowerCase().includes('group') || col1.toLowerCase().includes('group')) {
+            // 抓取组别名称 (排除掉写着 Group Name 或乱码的行)
+            let combinedText = (col0 + " " + col1).toLowerCase();
+            if (combinedText.includes('group') && !combinedText.includes('name')) {
               let groupString = col0.toLowerCase().includes('group') ? col0 : col1;
               currentGroupName = groupString.split('(')[0].trim(); 
-              if (!grouped[currentGroupName]) {
-                grouped[currentGroupName] = { leaders: [], members: [] };
+              if (currentGroupName && currentGroupName.toLowerCase() !== 'group name') {
+                if (!grouped[currentGroupName]) {
+                  grouped[currentGroupName] = { leaders: [], members: [] };
+                }
+              } else {
+                currentGroupName = null;
               }
-              memberIndex = 0; 
               continue;
             }
 
+            // 跳过无效標題行
             if (col1 === '名字' || col2 === 'Name' || col1.toLowerCase() === 'name') continue;
 
             if (currentGroupName && (col1 || col2)) {
               let rawName = col1 || col2;
               let cleanName = rawName.replace(/[(（](正|副)[)）]/g, '').trim();
-              if (!cleanName || cleanName.match(/^[0-9]+$/)) continue;
+              if (!cleanName || cleanName.match(/^[0-9]+$/) || cleanName.toLowerCase() === 'name') continue;
 
-              if (memberIndex === 0) {
-                grouped[currentGroupName].leaders.push(cleanName);
-              } else if (memberIndex === 1) {
-                grouped[currentGroupName].leaders.push(cleanName + ' (Vice)');
+              // 👑 智能辨识身分：看有没有包含「正/副/Leader/Vice」关键字
+              let lowerOriginal = (rawName + " " + col0).toLowerCase();
+              
+              if (lowerOriginal.includes('正') || lowerOriginal.includes('leader') || lowerOriginal.includes('组长') || lowerOriginal.includes('队长')) {
+                grouped[currentGroupName].leaders.push(cleanName + ' (Leader)');
+              } else if (lowerOriginal.includes('副') || lowerOriginal.includes('vice')) {
+                grouped[currentGroupName].leaders.push(cleanName + ' (Vice Leader)');
               } else {
+                // 如果没有写正副，默认就是普通组员！
                 grouped[currentGroupName].members.push(cleanName);
               }
-              memberIndex++;
             }
           }
+
+          let html = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; width: 100%;">';
+          const sortedGroupNames = Object.keys(grouped).sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
+
+          const selectEl = document.getElementById('manual-group-select');
+          if (selectEl) {
+              selectEl.innerHTML = '<option value="">-- Select Group (选择组别) --</option>';
+              sortedGroupNames.forEach(name => {
+                  selectEl.innerHTML += `<option value="${name}">${name}</option>`;
+              });
+          }
+
+          sortedGroupNames.forEach(groupName => {
+            const data = grouped[groupName];
+            html += `
+              <div class="glass-card" style="display: flex; flex-direction: column; gap: 16px; padding: 24px;">
+                <h3 style="color: var(--text-primary); border-bottom: 2px dashed var(--border-color); padding-bottom: 12px; margin: 0; font-size: 1.3rem;">
+                  ${groupName}
+                </h3>
+                <div style="background: rgba(255, 87, 34, 0.05); padding: 14px; border-radius: 12px; border: 1px solid rgba(255, 87, 34, 0.2);">
+                  <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--brand-orange); letter-spacing: 1px; margin-bottom: 8px;">👑 Group Leaders</div>
+                  <div style="display: flex; flex-direction: column; gap: 6px;">
+                    ${data.leaders.length > 0 ? data.leaders.map(leader => `<div style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">${leader}</div>`).join('') : '<div style="font-size: 0.85rem; color: var(--brand-orange); font-style: italic;">No leaders assigned</div>'}
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-secondary); letter-spacing: 1px; margin-bottom: 8px;">👥 Group Members</div>
+                  <div style="display: flex; flex-direction: column; gap: 6px;">
+                    ${data.members.length > 0 ? data.members.map(member => `<div style="font-size: 0.95rem; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;"><div style="width: 5px; height: 5px; background: var(--brand-blue); border-radius: 50%;"></div>${member}</div>`).join('') : '<div style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">No members assigned</div>'}
+                  </div>
+                </div>
+              </div>`;
+          });
+          html += '</div>';
+          container.innerHTML = html;
+        },
+        error: function() {
+          document.getElementById('groups-loading').innerText = "Failed to load groups data. Please check your connection.";
+        }
+      });
+    }
 
           let html = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; width: 100%;">';
           const sortedGroupNames = Object.keys(grouped).sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
