@@ -1115,13 +1115,50 @@
   </div>
 
   <!-- QR Scanner Camera Modal -->
+  <!-- ================= 新增：掃描後跳出的物資核銷彈窗 ================= -->
   <div id="scanner-modal-overlay" class="room-modal-overlay">
-    <div class="room-modal-card" style="display: flex; flex-direction: column; align-items: center; padding: 20px;">
-      <h3 style="margin-bottom: 15px; color: var(--text-primary);">Scan QR Code</h3>
+    <!-- 這個是原本的相機畫面 -->
+    <div class="room-modal-card" id="scanner-camera-card" style="display: flex; flex-direction: column; align-items: center; padding: 20px;">
+      <h3 style="margin-bottom: 15px; color: var(--text-primary);">Scan Leader QR Code</h3>
       <div id="reader" style="width: 100%; max-width: 350px; border-radius: 12px; overflow: hidden; border: 2px solid var(--brand-blue); margin-bottom: 15px;"></div>
       <button class="btn-primary" style="background: var(--surface-secondary); color: var(--text-primary); border: 1px solid var(--border-color); width: 100%;" onclick="closeScanner()">Cancel</button>
     </div>
+
+    <!-- 這個是掃描成功後，跳出來讓你打勾的清單 -->
+    <div class="room-modal-card" id="checklist-card" style="display: none; flex-direction: column; padding: 20px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto;">
+      <h3 id="group-title" style="margin-bottom: 5px; color: var(--brand-blue); font-size: 1.5rem; text-align: center;">Group Name</h3>
+      <p style="text-align: center; color: var(--text-secondary); margin-bottom: 15px; font-size: 0.9rem;">Select items to distribute to the entire group.</p>
+      
+      <!-- 統一物資發放選項 -->
+      <div style="background: var(--surface-secondary); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+          <h4 style="margin-bottom: 10px; color: var(--brand-orange);">📦 Batch Distribution</h4>
+          <label class="check-item" style="display: flex; margin-bottom: 10px;">
+              <input type="checkbox" id="chk-all-breakfast" style="margin-right: 10px; width: 22px; height: 22px;">
+              <span style="font-size: 1.1rem;">🍳 Day 1 Breakfast (All Members)</span>
+          </label>
+          <label class="check-item" style="display: flex; margin-bottom: 10px;">
+              <input type="checkbox" id="chk-all-lunch" style="margin-right: 10px; width: 22px; height: 22px;">
+              <span style="font-size: 1.1rem;">🍱 Day 1 Lunch (All Members)</span>
+          </label>
+          <label class="check-item" style="display: flex;">
+              <input type="checkbox" id="chk-all-dinner" style="margin-right: 10px; width: 22px; height: 22px;">
+              <span style="font-size: 1.1rem;">🍛 Day 1 Dinner (All Members)</span>
+          </label>
+      </div>
+
+      <!-- 個別組員清單 (將透過 JS 動態生成) -->
+      <h4 style="margin-bottom: 10px; color: var(--brand-green);">👥 Individual Members</h4>
+      <div id="member-checklist-container" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+          <!-- 這裡會動態載入該組的組員名單 -->
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: auto;">
+          <button class="btn-primary" style="flex: 1; background: var(--surface-secondary); color: var(--text-primary); border: 1px solid var(--border-color);" onclick="closeScanner()">Cancel</button>
+          <button class="btn-primary" style="flex: 2; background: var(--brand-blue);" onclick="submitDistribution()">✅ Confirm & Sync</button>
+      </div>
+    </div>
   </div>
+  <!-- ================= 彈窗代碼結束 ================= -->
 
   <!-- Overlays -->
   <div id="tooltip"></div>
@@ -1473,10 +1510,58 @@
       document.getElementById('scanner-modal-overlay').classList.remove('active');
     }
 
+  let currentScannedGroup = "";
+
     function onScanSuccess(decodedText, decodedResult) {
-      closeScanner();
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.pause(); // 掃到後先暫停相機
+      }
       if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-      alert(`Successfully scanned: ${decodedText}`);
+      
+      // 假設 QR Code 掃出來的文字就是組別名稱，例如 "Group 1"
+      currentScannedGroup = decodedText;
+      
+      // 隱藏相機，顯示打勾清單
+      document.getElementById('scanner-camera-card').style.display = 'none';
+      document.getElementById('checklist-card').style.display = 'flex';
+      document.getElementById('group-title').innerText = currentScannedGroup;
+
+      // 生成假資料測試 (這裡未來會接 Google Sheets)
+      const memberContainer = document.getElementById('member-checklist-container');
+      memberContainer.innerHTML = `
+          <div style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <span><strong>Ali</strong> (Leader) - T-Shirt: L</span>
+              <input type="checkbox" style="width: 20px; height: 20px;" checked disabled title="Already collected">
+          </div>
+          <div style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <span><strong>Muthu</strong> - T-Shirt: M</span>
+              <input type="checkbox" style="width: 20px; height: 20px;">
+          </div>
+          <div style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <span><strong>Ah Kao</strong> - T-Shirt: S</span>
+              <input type="checkbox" style="width: 20px; height: 20px;">
+          </div>
+      `;
+    }
+
+    function submitDistribution() {
+        // 這裡會把打勾的資料送到 Google Sheets (目前先用 Alert 模擬)
+        alert(`Data for ${currentScannedGroup} is syncing to Google Sheets via Worker!`);
+        closeScanner();
+    }
+
+    function closeScanner() {
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.stop().then(() => {
+          html5QrcodeScanner.clear();
+        }).catch(err => console.error("Failed to stop scanner", err));
+      }
+      document.getElementById('scanner-modal-overlay').classList.remove('active');
+      // 恢復原始狀態
+      setTimeout(() => {
+          document.getElementById('scanner-camera-card').style.display = 'flex';
+          document.getElementById('checklist-card').style.display = 'none';
+      }, 300);
     }
 
     function submitQA(event) {
