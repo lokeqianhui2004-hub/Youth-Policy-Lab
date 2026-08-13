@@ -1804,7 +1804,7 @@ function loadGroupsData() {
         skipEmptyLines: true,
         complete: function(results) { 
           const container = document.getElementById('groups-container');
-          if (results.data.length === 0) {
+          if (!results.data || results.data.length === 0) {
             container.innerHTML = `<div style="text-align:center; color:var(--text-secondary); font-weight:500;">No data found.</div>`;
             return;
           }
@@ -1813,59 +1813,48 @@ function loadGroupsData() {
           window.globalGroupData = {}; 
           const grouped = window.globalGroupData;
           
-          let pendingLeaders = []; // 暂存区：先把领队名字存起来
+          let tempLeaders = []; // 暂存区：记忆当前组别的领队
 
           for (let i = 0; i < rawData.length; i++) {
             const row = rawData[i];
-            const col0 = row[0] ? row[0].trim() : ''; // A 栏：领队 或 Group X
-            const col1 = row[1] ? row[1].trim() : ''; // B 栏：中文名字
-            const col2 = row[2] ? row[2].trim() : ''; // C 栏：英文名字
+            if (!row || row.length < 2) continue;
 
-            // 过滤掉表格的表头杂讯
-            if (col1 === '名字' || col1.toLowerCase() === 'name' || col0.toLowerCase() === 'group name') {
+            const col0 = row[0] ? row[0].trim() : ''; // 栏位 A (领队 / Group 1)
+            const col1 = row[1] ? row[1].trim() : ''; // 栏位 B (中文名)
+            const col2 = row[2] ? row[2].trim() : ''; // 栏位 C (英文名)
+
+            // 过滤掉不必要的表头行
+            if (col0.toLowerCase().includes('group name') || col1 === '名字' || col1.toLowerCase() === 'name') {
               continue;
             }
 
-            // 组合中英文名字 (例如: 张贝沂 (Becky Chong Bei Yi))
-            let fullName = "";
-            if (col1 && col2) {
-              fullName = `${col1} (${col2})`;
-            } else {
-              fullName = col1 || col2;
+            // 智能清理名字：去掉 (正) (副)，并将中英文合并
+            let cleanName = col1.replace(/[(（](正|副)[)）]/g, '').trim();
+            if (col2 && col1 !== col2) {
+              cleanName += ` (${col2})`;
             }
+            if (!cleanName || cleanName.match(/^[0-9]+$/)) continue;
 
-            if (!fullName || fullName.match(/^[0-9]+$/)) continue;
-
-            // 1. 如果 A 栏写着 "领队"，把名字暂存起来
+            // 1. 抓到「领队」，存入暂存区
             if (col0 === '领队' || col0.includes('领队')) {
-              let cleanName = fullName.replace(/[(（](正|副)[)）]/g, '').trim();
-              if (col1.includes('副') || col2.toLowerCase().includes('vice')) {
-                pendingLeaders.push(cleanName + ' (Vice Leader)');
-              } else {
-                pendingLeaders.push(cleanName + ' (Leader)');
-              }
-              continue;
-            }
-
-            // 2. 如果 A 栏写着 Group 几 (例如 Group 3)
-            let lowerCol0 = col0.toLowerCase();
-            if (lowerCol0.includes('group')) {
-              let groupName = col0.split('(')[0].trim();
-              if (!groupName || groupName.toLowerCase() === 'group name') continue;
-
-              // 如果这一组还没建立过，建立它，并把刚才暂存的领队一次性绑定过去！
+              let role = (col1.includes('副') || col2.toLowerCase().includes('vice')) ? ' (Vice Leader)' : ' (Leader)';
+              tempLeaders.push(cleanName + role);
+            } 
+            // 2. 抓到「Group」，绑定刚才暂存的领队，并加入组员
+            else if (col0.toLowerCase().includes('group')) {
+              const groupName = col0;
+              
               if (!grouped[groupName]) {
                 grouped[groupName] = { 
-                  leaders: [...pendingLeaders], 
+                  leaders: [...tempLeaders], // 绑定暂存的领队
                   members: [] 
                 };
-                pendingLeaders = []; // 领队绑定后清空，留给下一组
+                tempLeaders = []; // 领队绑定完毕，清空暂存区，准备接下一组
               }
 
-              // 把组员加入该组
-              let cleanMemberName = fullName.replace(/[(（](正|副)[)）]/g, '').trim();
-              if (!grouped[groupName].members.includes(cleanMemberName)) {
-                grouped[groupName].members.push(cleanMemberName);
+              // 加入普通组员 (避免重复)
+              if (!grouped[groupName].members.includes(cleanName)) {
+                grouped[groupName].members.push(cleanName);
               }
             }
           }
@@ -1873,6 +1862,7 @@ function loadGroupsData() {
           let html = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; width: 100%;">';
           const sortedGroupNames = Object.keys(grouped).sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
 
+          // 下拉选单功能保留
           const selectEl = document.getElementById('manual-group-select');
           if (selectEl) {
               selectEl.innerHTML = '<option value="">-- Select Group (选择组别) --</option>';
@@ -1904,7 +1894,9 @@ function loadGroupsData() {
           });
           html += '</div>';
           container.innerHTML = html;
-        },
+        }
+      });
+    }
         error: function() {
           document.getElementById('groups-loading').innerText = "Failed to load groups data. Please check your connection.";
         }
