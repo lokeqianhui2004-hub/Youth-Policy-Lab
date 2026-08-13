@@ -2084,14 +2084,25 @@ function openRoomModal(block) {
 
       if (!overlay || !content) return;
 
-      // 1. 尝试直接抓取电脑版原本使用的完整住户资讯 HTML
-      // （如果 block 裡面有詳細內容，就用它；如果沒有，才 fallback 抓房號）
-      let detailedHtml = block.innerHTML;
+      // 1. 获取当前房间号
+      const roomNum = block.getAttribute('data-room') || block.innerText.trim();
+
+      // 2. 尝试从原本电脑版的 tooltip 产生逻辑中借用资料，或者读取 block 上的储存资料
+      // 如果你的房间元素上有绑定 occupants 資料，直接抓取；如果没有，我们直接显示该房间的完整 HTML
+      let occupantsHtml = block.getAttribute('data-occupants') || '';
+      
+      if (!occupantsHtml) {
+        // 终极备用方案：如果找不到，直接把该房间绑定的 dataset 或内部所有资讯抓出来
+        occupantsHtml = block.innerHTML;
+      }
 
       // 填充进手机弹窗中
       content.innerHTML = `
+        <div style="font-size: 1.1rem; font-weight: bold; color: var(--brand-blue); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px;">
+          Room ${roomNum} Details
+        </div>
         <div style="font-size: 1rem; color: var(--text-primary); line-height: 1.6; max-height: 60vh; overflow-y: auto;">
-          ${detailedHtml}
+          ${occupantsHtml}
         </div>
       `;
 
@@ -2109,7 +2120,7 @@ function openRoomModal(block) {
         };
       }
 
-      // 强制开启弹窗
+      // 强制开启手机弹窗
       overlay.classList.add('active');
     }
 
