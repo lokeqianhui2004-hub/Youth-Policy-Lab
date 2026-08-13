@@ -1,438 +1,2095 @@
-Youth Policy Lab SuperApp
-A lightweight, mobile-friendly web application developed for Youth Policy Lab to centralise event information, accommodation, schedules, participant management, packing guidance, and camp rules in one accessible interface.
-The SuperApp is designed as a static web application, meaning it does not require a traditional backend server or database to run. Live participant and itinerary information can be supplied through published Google Sheets CSV endpoints.
-✨ Features
-🏨 Accommodation Directory
-Interactive hostel room directory
-3D and flat/2D viewing modes
-Room occupancy indicators
-Participant search
-Filters for:
-Vacant rooms
-VIPs
-Boys
-Girls
-Live synchronisation with Google Sheets
-Automatic refresh of directory data
-The directory reads participant information from a published Google Sheets CSV and maps occupants to the corresponding rooms.
-📅 Event Timeline
-Live event itinerary
-Automatically loaded from Google Sheets
-Supports scheduled updates without modifying the application itself
-Automatic refresh every 60 seconds
-The application retrieves the timeline from a published CSV endpoint and renders it dynamically.
-📖 Digital Handbook
-Embedded Canva handbook
-Responsive presentation
-Opens the full handbook through Canva when required
-🎒 Packing List
-Interactive checklist
-Packing progress indicator
-English / Simplified Chinese language support
-Print / PDF functionality
-Reset functionality
-Information on accommodation, meals, transport, health and safety
-📜 Camp Rules
-Interactive rules and regulations
-English / Simplified Chinese language support
-Expand/collapse sections
-Zero-tolerance rules
-Digital camper pledge
-Pledge state stored locally in the browser
-🌙 Dark Mode
-Light and dark themes
-User preference stored using browser localStorage
-Separate light and dark Youth Policy Lab logos
-📱 Responsive Design
-The application is designed for:
-Desktop
-Tablets
-Mobile phones
-🛠️ Technology Stack
-The SuperApp intentionally uses a simple frontend architecture.
-Technology	Purpose
-HTML5	Application structure
-CSS3	Styling, responsive layout and animations
-JavaScript	Application logic and interactivity
-PapaParse	Reading Google Sheets CSV data
-Google Sheets	Live participant and itinerary data
-Google Fonts	Poppins and Noto Sans SC
-Canva	Digital handbook
-Browser localStorage	Theme, language and pledge preferences
-The application currently loads PapaParse 5.4.1 directly from CDN and uses Google Fonts for Poppins and Noto Sans SC.
-📦 Packages & Dependencies
-Runtime Dependencies
-There is currently no npm installation required.
-The application uses browser-based CDN dependencies.
-PapaParse
-PapaParse is used to parse CSV data retrieved from Google Sheets.
-Current version:
-PapaParse 5.4.1
-Loaded through:
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-The application uses Papa.parse() to download and process the participant directory and event timeline CSV files.
-Google Fonts
-The application uses:
-Poppins
-Noto Sans SC
-These are loaded remotely from Google Fonts.
-Canva
-The event handbook is embedded using a Canva iframe.
-📁 Project Structure
-A recommended repository structure is:
-youth-policy-lab-superapp/
-│
-├── index.html
-│
-├── logo-light.png
-├── logo-dark.png
-│
-├── README.md
-├── LICENSE
-│
-└── .gitignore
-index.html
-The main application.
-The current application contains the HTML, CSS and JavaScript in a single file.
-logo-light.png
-Logo displayed when the application is using light mode.
-logo-dark.png
-Logo displayed when the application is using dark mode.
-The application automatically switches between the two logo files according to the selected theme.
-🚀 Installation
-Option 1: Run Locally
-No build process is required.
-Clone the repository:
-git clone https://github.com/YOUR-ORGANISATION/youth-policy-lab-superapp.git
-cd youth-policy-lab-superapp
-Then open:
-index.html
-in a modern web browser.
-For best results, use a local HTTP server rather than opening the file directly.
-Python
-python3 -m http.server 8000
-Then visit:
-http://localhost:8000
-🌐 Deployment
-Because the application is a static website, it can be deployed using services such as:
-GitHub Pages
-Netlify
-Vercel
-Cloudflare Pages
-Any conventional web server
-No Node.js backend or database is required.
-🔧 Configuration
-Several parts of the application are configured directly inside index.html.
-Event Countdown
-The event start time is currently defined in JavaScript:
-const EVENT_START = new Date('2026-08-14T09:00:00+08:00');
-Change this value when deploying the application for another event.
-The current application is configured for 14 August 2026, 9:00 AM MYT.
-Google Sheets Integration
-Two Google Sheets CSV endpoints are currently used:
-const DIR_CSV_URL = 'YOUR_DIRECTORY_CSV_URL';
-const TIMELINE_CSV_URL = 'YOUR_TIMELINE_CSV_URL';
-The live application currently uses separate CSV sources for:
-Participant / room directory
-Event timeline
-The refresh interval is:
-const REFRESH_INTERVAL_MS = 60000;
-which corresponds to 60 seconds.
-Updating the Directory
-The Google Sheet should contain data compatible with the application's expected structure:
-Name | Gender | Room Type | Room Number | Remarks
-Example:
-John Tan | Male | Twin | 301 | VIP
-Jane Lim | Female | Double | 302 |
-The application reads these fields and associates participants with rooms.
-Publishing a Google Sheet
-Open the Google Sheet.
-Select File → Share → Publish to web.
-Select the relevant worksheet.
-Publish it as CSV.
-Copy the generated CSV URL.
-Replace the corresponding URL in index.html.
-Security warning: Do not place passwords, API keys, private credentials or other secrets in the Google Sheet or frontend code.
-Because the CSV is publicly accessible when published to the web, only information appropriate for public exposure should be included.
-🧩 Adding or Updating Packages
-Current architecture
-The project does not currently use:
-package.json
-npm
-node_modules
-webpack
-Vite
-React
-Vue
-There is therefore no need to run:
-npm install
-Humanity has been spared from node_modules for at least one project.
-If a future dependency is required
-For a small dependency, a CDN import may be appropriate:
-<script src="https://cdn.example.com/package/version/package.min.js"></script>
-For larger development requirements, the project can be migrated to npm.
-Example:
-npm init -y
-npm install package-name
-Development dependencies can be added with:
-npm install --save-dev package-name
-Before adding a dependency, consider:
-License compatibility
-Package maintenance
-Security
-Bundle size
-Browser compatibility
-Whether the dependency is actually necessary
-🔐 Licensing
-Recommended License
-The source code of the Youth Policy Lab SuperApp may be distributed under the MIT License, unless Youth Policy Lab or the copyright holder specifies otherwise.
-Create a file named:
-LICENSE
-and place the MIT License text inside it.
-The copyright notice should identify the actual copyright holder, for example:
-Copyright (c) 2026 Youth Policy Lab
-Important
-The MIT License applies to the project source code, not automatically to every external asset or service used by the application.
-In particular, check the licensing or usage rights for:
-Youth Policy Lab logos
-Photographs
-Canva designs
-Written handbook content
-Google Sheets data
-Fonts
-Third-party JavaScript libraries
-The Canva handbook is an externally hosted resource embedded by the application, rather than being part of the HTML source itself.
-📄 Third-Party Licenses
-Third-party dependencies should be acknowledged where appropriate.
-PapaParse
-PapaParse is distributed under its own open-source license.
-The application currently consumes PapaParse through cdnjs.
-Google Fonts
-The application uses:
-Poppins
-Noto Sans SC
-Refer to the respective font licenses before redistributing font files locally.
-Canva
-The handbook is hosted by Canva and embedded through Canva's provided embed mechanism.
-The Canva content should not be treated as being licensed under the project's MIT License.
-📦 Releases
-Releases should use Git tags and GitHub Releases.
-Recommended versioning:
-v1.0.0
-v1.0.1
-v1.1.0
-v2.0.0
-Follow semantic versioning:
-MAJOR.MINOR.PATCH
-MAJOR
-Breaking changes.
-Example:
-v2.0.0
-A major redesign or incompatible change to the Google Sheets data structure.
-MINOR
-New functionality without breaking existing functionality.
-Example:
-v1.1.0
-Adding a new module such as an emergency contacts page.
-PATCH
-Bug fixes or minor corrections.
-Example:
-v1.0.1
-Fixing a mobile layout issue or correcting a typo.
-🏷️ Creating a Release
-First commit your changes:
-git add .
-git commit -m "Release v1.0.0"
-Create a tag:
-git tag -a v1.0.0 -m "Youth Policy Lab SuperApp v1.0.0"
-Push the tag:
-git push origin v1.0.0
-Then create a GitHub Release from the tag.
-📝 Example Release Notes
-# Youth Policy Lab SuperApp v1.0.0
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Youth Policy Lab - SuperApp</title>
+  
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Youth Policy Lab SuperApp">
+  <meta property="og:description" content="The official Youth Policy Lab SuperApp for schedules, accommodation, handbook, packing information and camp rules.">
+  <meta property="og:image" content="https://youthpolicylab.pages.dev/og-image.png">
+  <meta property="og:url" content="https://youthpolicylab.pages.dev/">
 
-## Initial Release
+  <!-- PapaParse for direct Google Sheets CSV integration -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  
+  <!-- HTML5 QR Code Scanner -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-### Features
-- Interactive hostel room directory
-- Live Google Sheets participant synchronisation
-- Event timeline
-- Digital Canva handbook
-- Interactive packing checklist
-- English / Chinese language support
-- Camp rules and digital pledge
-- Dark mode
-- Responsive mobile interface
+  <style>
+    :root {
+      /* Official Youth Policy Lab Brand Colors */
+      --brand-orange: #FF5722;
+      --brand-green: #00C853;
+      --brand-blue: #007AFF;
+      --brand-yellow: #FFC748;
+      --brand-black: #141419;
+      
+      /* Liquid Glass Theme UI Variables (Light) */
+      --bg-color: #f0f2f5;
+      --surface-color: rgba(255, 255, 255, 0.75);
+      --surface-secondary: rgba(255, 255, 255, 0.55);
+      --text-primary: var(--brand-black);
+      --text-secondary: #555555;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --glass-bg: rgba(255, 255, 255, 0.75);
+      --glass-blur: blur(24px) saturate(180%);
+      --shadow-soft: 0 8px 32px rgba(31, 38, 135, 0.07);
+      
+      /* Room Blocks */
+      --corridor: rgba(233, 236, 239, 0.8);
+      --occupied-gradient: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-green) 100%);
+    }
 
-### Data Sources
-- Google Sheets CSV
-- Canva handbook
+    body.dark-mode {
+      /* Liquid Glass Theme UI Variables (Dark) */
+      --bg-color: #050505;
+      --surface-color: rgba(28, 28, 30, 0.65);
+      --surface-secondary: rgba(44, 44, 46, 0.55);
+      --text-primary: #f5f5f7;
+      --text-secondary: #a1a1a6;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --glass-bg: rgba(28, 28, 30, 0.75);
+      --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --corridor: rgba(44, 44, 46, 0.8);
+    }
 
-### Known Limitations
-- Requires internet access for live data
-- Google Sheets must remain publicly published as CSV
-- Canva handbook requires access to Canva
-- Participant data should not contain confidential information
-🔄 Recommended Development Workflow
-1. Create a feature branch
-        ↓
-2. Make changes to index.html
-        ↓
-3. Test on desktop
-        ↓
-4. Test on mobile
-        ↓
-5. Verify Google Sheets synchronisation
-        ↓
-6. Check Canva handbook
-        ↓
-7. Commit changes
-        ↓
-8. Merge into main
-        ↓
-9. Create version tag
-        ↓
-10. Publish GitHub Release
-        ↓
-11. Deploy updated website
-Recommended branches:
-main
-develop
-feature/room-directory
-feature/timeline
-feature/packing-list
-fix/mobile-layout
-🧪 Testing Checklist
-Before releasing a new version:
-Directory
+    html, body { overscroll-behavior-y: none; touch-action: pan-x pan-y; -webkit-tap-highlight-color: transparent; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body { 
+      background-color: var(--bg-color); 
+      color: var(--text-primary); 
+      font-family: 'Poppins', 'Noto Sans SC', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100dvh; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      padding: 0 0 60px 0;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      background-image: radial-gradient(circle at 15% 50%, rgba(0, 122, 255, 0.04), transparent 25%),
+                        radial-gradient(circle at 85% 30%, rgba(0, 200, 83, 0.04), transparent 25%);
+    }
 
-Room numbers display correctly
+    /* GLASSMORPHISM UTILITIES */
+    .glass-card {
+      background: var(--surface-color);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      box-shadow: var(--shadow-soft);
+      padding: 24px;
+    }
 
-Participant search works
+    /* 1. MAIN HEADER - LAPTOP FLEX LAYOUT */
+    .main-header {
+      width: 100%;
+      padding: 24px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      max-width: 1250px;
+    }
 
-Gender filters work
+    .header-top-bar {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
 
-VIP filter works
+    .header-left {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      justify-content: flex-start;
+      gap: 15px;
+    }
 
-Vacant-room filter works
+    .header-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      flex: 1;
+    }
 
-Google Sheets synchronisation works
+    .brand-logo { height: 55px; width: auto; object-fit: contain; transition: opacity 0.2s ease; }
+    h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; color: var(--text-primary); }
+    .brand-hl-1 { color: var(--brand-blue); } .brand-hl-2 { color: var(--brand-green); } .brand-hl-3 { color: var(--brand-orange); }
 
-Offline/error state displays correctly
-Timeline
+    .theme-toggle, .lang-select {
+      background: var(--surface-color); border: 1px solid var(--border-color);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s ease;
+      backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+      box-shadow: var(--shadow-soft); position: relative; color: var(--text-primary);
+    }
+    .theme-toggle { border-radius: 50%; width: 44px; height: 44px; font-size: 1.2rem; }
+    .theme-toggle:hover { transform: scale(1.1); }
+    
+    .lang-select {
+      border-radius: 12px; height: 44px; padding: 0 12px; font-family: 'Poppins', sans-serif;
+      font-weight: 600; font-size: 0.9rem; appearance: none; -webkit-appearance: none; outline: none;
+      text-align: center;
+    }
+    .lang-select:hover { border-color: var(--brand-blue); }
 
-Timeline loads
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+      background: var(--surface-color); color: var(--text-secondary); border: 1px solid var(--border-color); transition: all 0.3s ease;
+    }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-secondary); transition: all 0.3s ease; }
+    .status-badge.synced .status-dot { background: var(--brand-green); box-shadow: 0 0 8px rgba(0, 200, 83, 0.4); }
+    .status-badge.synced { color: var(--text-primary); }
+    .status-badge.offline .status-dot { background: var(--brand-orange); }
+    .refresh-btn { background: none; border: none; cursor: pointer; padding: 0; margin-left: 4px; font-size: 1rem; color: inherit; transition: transform 0.4s ease; }
 
-Dates and times display correctly
+    /* Countdown Timer */
+    .countdown-section { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; justify-content: center; }
+    .countdown-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-secondary); }
+    .countdown-timer { display: flex; align-items: flex-start; gap: 8px; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 16px; padding: 10px 18px; box-shadow: var(--shadow-soft); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); }
+    .countdown-unit { display: flex; flex-direction: column; align-items: center; min-width: 40px; }
+    .countdown-value { font-size: 1.5rem; font-weight: 700; color: var(--brand-orange); font-variant-numeric: tabular-nums; line-height: 1; }
+    .countdown-unit-label { font-size: 0.6rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+    .countdown-separator { font-size: 1.3rem; font-weight: 700; color: var(--text-secondary); padding-top: 1px; }
+    .countdown-date { font-size: 0.7rem; font-weight: 500; color: var(--text-secondary); }
 
-Google Sheets data is current
+    /* Keyframes for Ticker Pulse */
+    @keyframes pulse {
+      0% { opacity: 1; box-shadow: 0 0 8px var(--brand-orange); }
+      50% { opacity: 0.4; box-shadow: 0 0 2px var(--brand-orange); }
+      100% { opacity: 1; box-shadow: 0 0 8px var(--brand-orange); }
+    }
 
-CSV errors are handled
-Handbook
+    /* 2. STICKY TOOLBAR */
+    .sticky-toolbar {
+      position: sticky; top: 0; width: 100%; background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--border-color); padding: 12px 40px; z-index: 100; display: flex; justify-content: space-between; align-items: center; gap: 20px; box-shadow: var(--shadow-soft);
+    }
+    .tab-nav { display: flex; background: var(--surface-secondary); padding: 4px; border-radius: 10px; gap: 4px; border: 1px solid var(--border-color); flex-wrap: wrap; }
+    .tab-nav button { background: transparent; color: var(--text-secondary); border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; font-family: 'Poppins', sans-serif; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; }
+    .tab-nav button.active { background: var(--text-primary); color: var(--bg-color); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 
-Canva embed loads
+    .toolbar-right { display: none; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+    .toolbar-right.active { display: flex !important; }
 
-Handbook opens correctly
+    /* Search & Filters */
+    .search-wrapper { position: relative; width: 250px; }
+    #searchInput { width: 100%; padding: 8px 32px 8px 16px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--surface-color); color: var(--text-primary); font-size: 0.9rem; font-family: 'Poppins', sans-serif; font-weight: 500; transition: all 0.2s; }
+    #searchInput:focus { outline: none; border-color: var(--brand-blue); box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15); }
+    .clear-search-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); display: none; background: transparent; border: none; font-size: 1rem; color: var(--text-secondary); cursor: pointer; padding: 0; }
+    
+    .filter-group, .controls { display: flex; background: var(--surface-secondary); padding: 4px; border-radius: 8px; gap: 4px; border: 1px solid var(--border-color); }
+    .filter-btn, .btn { background: transparent; color: var(--text-secondary); border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-weight: 600; font-family: 'Poppins', sans-serif; transition: all 0.2s ease; white-space: nowrap; }
+    .filter-btn.active, .btn.active { background: var(--text-primary); color: var(--bg-color); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 
-Mobile display works
-Packing List
+    /* Tab Content Wrappers */
+    .tab-content { display: none; width: 100%; justify-content: center; }
+    .tab-content.active { display: flex; flex-direction: column; align-items: center; }
 
-Checkboxes work
+    /* TAB: 3D PERSPECTIVE CANVAS */
+    .viewport { perspective: 1400px; width: 100%; max-width: 1250px; display: flex; flex-direction: column; gap: 60px; padding: 40px 20px; position: relative; }
+    .quick-jump-bar { position: sticky; top: 90px; z-index: 90; display: flex; justify-content: center; gap: 12px; pointer-events: none; margin-bottom: -20px; width: 100%; }
+    .quick-jump-btn { pointer-events: auto; background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 2px solid var(--brand-blue); color: var(--brand-blue); padding: 6px 20px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; cursor: pointer; box-shadow: var(--shadow-soft); transition: all 0.2s ease; }
+    .quick-jump-btn:hover { background: var(--brand-blue); color: #fff; }
 
-Progress counter updates
+    .floor-container {
+      background: var(--surface-color); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-color); border-radius: 24px; padding: 40px;
+      transform-style: preserve-3d; transform: rotateX(45deg) rotateZ(-5deg) translateZ(0);
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow-soft); scroll-margin-top: 150px;
+    }
+    .viewport.flat .floor-container { transform: rotateX(0deg) rotateZ(0deg) translateZ(0); }
 
-Language switch works
+    .floor-title { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 24px; transform: translateZ(10px); display: inline-block; padding-bottom: 4px; border-bottom: 4px solid var(--brand-orange); }
+    .wing-title { font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); margin: 16px 0 8px 0; text-transform: uppercase; letter-spacing: 1px; transform: translateZ(10px); }
+    .room-row { display: flex; gap: 8px; margin-bottom: 10px; transform-style: preserve-3d; }
+    .room-block { flex: 1; min-width: 52px; height: 60px; position: relative; transform-style: preserve-3d; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease, opacity 0.3s ease; cursor: pointer; }
+    .room-block:focus { outline: none; }
+    
+    .room-block[data-room] .face-top { position: absolute; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; background-color: var(--surface-secondary); color: var(--text-secondary); border-radius: 6px; transform: translateZ(16px); box-shadow: inset 0 0 0 1px var(--border-color); transition: all 0.3s ease; }
+    .room-block[data-room] .face-front { position: absolute; width: 100%; height: 16px; bottom: 0; transform-origin: bottom; transform: rotateX(-90deg); background-color: var(--border-color); filter: brightness(0.8); border-radius: 0 0 6px 6px; transition: all 0.3s ease; }
+    
+    .room-block.occupied .face-top { background: var(--occupied-gradient) !important; color: #ffffff !important; box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3) !important; }
+    .room-block.occupied .face-front { background: var(--brand-blue) !important; filter: brightness(0.75); }
+    
+    .room-block:hover { transform: translateZ(16px) scale(1.05); z-index: 50; }
+    .room-block:hover .face-top { box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), inset 0 0 0 2px #ffffff !important; }
+    
+    .viewport.filtered .room-block:not(.highlight):not([data-room-type="corridor"]) .face-top { background: var(--surface-secondary) !important; color: var(--text-secondary) !important; box-shadow: none !important; }
+    .viewport.filtered .room-block:not(.highlight) { pointer-events: none; transform: translateZ(0) scale(0.98) !important; }
+    .room-block.highlight .face-top { box-shadow: 0 0 0 4px var(--text-primary), 0 15px 30px rgba(0,0,0,0.2) !important; z-index: 60; }
+    
+    .room-block[data-room-type="corridor"] { cursor: default; }
+    .room-block[data-room-type="corridor"] .face-top { background-color: var(--corridor); color: var(--text-secondary); transform: translateZ(2px); }
+    .room-block[data-room-type="corridor"] .face-front { background-color: var(--border-color); height: 2px; }
 
-Reset works
+    /* TAB: TIMELINE */
+    .timeline-wrapper { width: 100%; max-width: 700px; padding: 40px 20px; display: flex; flex-direction: column; gap: 16px; }
+    .timeline-date-header { font-size: 1.4rem; font-weight: 700; color: var(--brand-orange); margin-top: 24px; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); display: inline-block; }
+    .timeline-item { display: flex; gap: 20px; background: var(--surface-color); backdrop-filter: var(--glass-blur); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); transition: transform 0.2s ease, box-shadow 0.2s; box-shadow: var(--shadow-soft); }
+    .timeline-item:hover { transform: translateY(-4px); border-color: var(--brand-blue); }
+    .timeline-time { min-width: 100px; font-size: 1rem; font-weight: 700; color: var(--brand-blue); flex-shrink: 0; }
+    .timeline-content { display: flex; flex-direction: column; gap: 6px; }
+    .timeline-title { font-size: 1.15rem; font-weight: 700; color: var(--text-primary); }
+    .timeline-venue { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
 
-Print/PDF works
-Camp Rules
+    /* TAB: HUB & ENGAGE */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; width: 100%; max-width: 1050px; padding: 30px 20px; }
+    .sos-btn { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: rgba(255, 87, 34, 0.1); border: 1px solid var(--brand-orange); border-radius: 12px; color: var(--brand-orange); text-decoration: none; font-weight: 700; margin-bottom: 10px; }
+    .input-field { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--surface-secondary); color: var(--text-primary); font-family: 'Poppins'; margin-bottom: 12px; }
+    .btn-primary { background: var(--brand-blue); color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%; }
+    .star-rating { display: flex; gap: 8px; font-size: 2rem; color: var(--border-color); cursor: pointer; margin-bottom: 16px; justify-content: center; }
+    .star-rating .star:hover, .star-rating .star.active { color: var(--brand-yellow); }
 
-Accordion sections open and close
+    /* TAB: HANDBOOK CANVA */
+    .handbook-wrapper { width: 100%; max-width: 800px; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
+    .canva-embed-container { position: relative; width: 100%; max-width: calc((100dvh - 160px) * 0.7047); aspect-ratio: 1 / 1.4189; box-shadow: var(--shadow-soft); border-radius: 12px; overflow: hidden; background: var(--surface-secondary); border: 1px solid var(--border-color); }
+    .canva-embed-container iframe { position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; }
 
-Language switch works
+    /* TAB: PACKING LIST */
+    .packing-wrapper { width: 100%; max-width: 1100px; padding: 30px 20px; display: flex; flex-direction: column; gap: 24px; }
+    .packing-hero { background: var(--surface-color); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: 16px; }
+    .progress-container { display: flex; flex-direction: column; gap: 8px; }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 0.95rem; }
+    .progress-bar-bg { width: 100%; height: 12px; background: var(--surface-secondary); border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); }
+    .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--brand-blue), var(--brand-green)); border-radius: 6px; transition: width 0.3s ease; }
+    
+    .packing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+    .packing-card { background: var(--surface-color); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: 16px; }
+    .packing-card h3 { font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--text-primary); border-bottom: 2px dashed var(--border-color); padding-bottom: 12px; }
+    .checklist-group { display: flex; flex-direction: column; gap: 12px; }
+    .check-item { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; user-select: none; padding: 6px 8px; border-radius: 8px; transition: background 0.2s ease; }
+    .check-item:hover { background: var(--surface-secondary); }
+    .check-item input[type="checkbox"] { appearance: none; -webkit-appearance: none; width: 20px; height: 20px; border: 2px solid var(--text-secondary); border-radius: 6px; margin-top: 2px; outline: none; cursor: pointer; display: grid; place-content: center; transition: all 0.2s ease; flex-shrink: 0; }
+    .check-item input[type="checkbox"]:checked { background-color: var(--brand-green); border-color: var(--brand-green); }
+    .check-item input[type="checkbox"]:checked::before { content: "✓"; color: white; font-size: 13px; font-weight: 700; }
+    .check-item-text { display: flex; flex-direction: column; gap: 2px; }
+    .item-title { font-weight: 600; font-size: 0.95rem; color: var(--text-primary); transition: color 0.2s, text-decoration 0.2s; }
+    .check-item input[type="checkbox"]:checked ~ .check-item-text .item-title { text-decoration: line-through; color: var(--text-secondary); }
+    .item-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.3; }
 
-Digital pledge works
+    .alert-banner { background: rgba(255, 87, 34, 0.08); border: 1px solid var(--brand-orange); border-radius: 16px; padding: 18px 24px; display: flex; flex-direction: column; gap: 12px; }
+    .alert-banner h4 { color: var(--brand-orange); font-weight: 700; font-size: 1rem; }
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+    .prohibited-tag { background: var(--surface-color); border: 1px solid rgba(255, 87, 34, 0.3); color: var(--brand-orange); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
 
-Pledge state persists correctly
-General
+    /* TAB: CAMP RULES */
+    .rules-wrapper { width: 100%; max-width: 1050px; padding: 30px 20px; display: flex; flex-direction: column; gap: 24px; }
+    .rules-spirit-card { background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(0, 200, 83, 0.1)); border: 1px solid var(--brand-blue); border-radius: 20px; padding: 28px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; box-shadow: var(--shadow-soft); }
+    .spirit-title { font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--brand-blue); }
+    .spirit-pillars { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .spirit-pillar { background: var(--surface-color); padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 1rem; border: 1px solid var(--border-color); color: var(--text-primary); }
+    
+    .rules-accordion { display: flex; flex-direction: column; gap: 16px; }
+    .rule-card { background: var(--surface-color); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-color); border-radius: 18px; overflow: hidden; transition: border-color 0.2s ease, box-shadow 0.2s ease; box-shadow: var(--shadow-soft); }
+    .rule-card:hover { border-color: var(--brand-blue); }
+    .rule-header { padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; font-weight: 700; font-size: 1.05rem; }
+    .rule-arrow { font-size: 0.9rem; color: var(--text-secondary); transition: transform 0.3s ease; }
+    .rule-card.active .rule-arrow { transform: rotate(180deg); }
+    .rule-body { display: none; padding: 0 24px 20px 24px; border-top: 1px dashed var(--border-color); flex-direction: column; gap: 12px; margin-top: 8px; padding-top: 16px; }
+    .rule-card.active .rule-body { display: flex; }
+    .rule-item { display: flex; flex-direction: column; gap: 4px; font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary); }
+    .rule-item strong { color: var(--text-primary); font-weight: 600; }
+    
+    .pledge-card { background: var(--surface-color); backdrop-filter: var(--glass-blur); border: 2px solid var(--brand-green); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 16px; box-shadow: var(--shadow-soft); }
+    .pledge-card h3 { color: var(--brand-green); font-size: 1.15rem; font-weight: 700; }
+    .pledge-box { background: var(--surface-secondary); padding: 16px; border-radius: 12px; font-size: 0.88rem; line-height: 1.6; color: var(--text-primary); border-left: 4px solid var(--brand-green); }
 
-Light mode works
+    /* TOOLTIPS, TOASTS, MODAL & PRINT */
+    #tooltip { position: fixed; display: none; background: var(--glass-bg); backdrop-filter: var(--glass-blur); color: var(--text-primary); padding: 16px; border-radius: 14px; font-size: 0.85rem; pointer-events: none; z-index: 1000; box-shadow: 0 15px 35px rgba(0,0,0,0.2), 0 0 0 1px var(--border-color); min-width: 240px; }
+    .click-hint { font-size: 0.7rem; color: var(--text-secondary); margin-top: 12px; text-align: center; font-weight: 500; }
+    #toast { position: fixed; bottom: 30px; left: 50%; transform: translate(-50%, 100px); background: var(--brand-green); color: white; padding: 12px 24px; border-radius: 30px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2000; pointer-events: none; }
+    #toast.show { transform: translate(-50%, 0); opacity: 1; }
 
-Dark mode works
+    /* ROOM DETAILS MOBILE MODAL */
+    .room-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 2500;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .room-modal-overlay.active { display: flex; }
+    .room-modal-card {
+      width: 100%;
+      max-width: 380px;
+      background: var(--surface-color);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      padding: 24px;
+      animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalPop {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
 
-Logos load
+    @media print {
+      body * { visibility: hidden; }
+      #tab-packing, #tab-packing *, #tab-rules, #tab-rules * { visibility: visible; }
+      #tab-packing, #tab-rules { position: absolute; left: 0; top: 0; width: 100%; }
+      .sticky-toolbar, .main-header, .theme-toggle, .lang-select { display: none !important; }
+      .packing-card, .rule-card, .pledge-card { break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; }
+      .rule-body { display: flex !important; }
+    }
 
-Mobile layout works
+    /* =========================================
+       PREMIUM SPLASH SCREEN BACKDROP (?mode=splash) 
+       ========================================= */
+    #splash-screen {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background-color: #FEF9F0; /* Creamy yellow background */
+      background-image: 
+        radial-gradient(circle at 15% 85%, rgba(215, 205, 245, 0.8), transparent 50%), /* Soft purple wave */
+        radial-gradient(circle at 85% 15%, rgba(255, 230, 150, 0.5), transparent 40%), /* Soft yellow */
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.9), transparent 60%);
+      z-index: 9999;
+      overflow: hidden;
+      font-family: 'Poppins', 'Noto Sans SC', sans-serif;
+    }
+    body.mode-splash #splash-screen { display: block; }
 
-Desktop layout works
+    /* Animated Ambient Orbs */
+    .splash-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.7;
+      animation: floatOrb 20s infinite alternate ease-in-out;
+      pointer-events: none;
+    }
+    .orb-1 { width: 600px; height: 600px; background: rgba(220, 210, 250, 0.6); top: -10%; left: -10%; }
+    .orb-2 { width: 500px; height: 500px; background: rgba(255, 235, 160, 0.6); bottom: -10%; right: -5%; animation-delay: -5s; }
 
-No browser console errors
-🔒 Privacy & Data Protection
-The SuperApp may display participant information retrieved from Google Sheets.
-Administrators should therefore ensure that:
-Only necessary information is published.
-Sensitive personal information is excluded.
-The Google Sheet is accessible only to the intended audience where possible.
-Publicly accessible CSV URLs are treated as public information.
-Participant data is removed or archived after the event where appropriate.
-The frontend itself should never contain passwords, API keys, private tokens or other secrets.
-🛠️ Maintenance
-For future Youth Policy Lab events, the following items should normally be updated:
-Event date/time
-Google Sheets URLs
-Participant data
-Room assignments
-Timeline
-Canva handbook
-Packing list
-Camp rules
-Brand assets
-Version number
-The application's live data polling is already separated from the UI, making it possible to update participant and timeline information without rewriting the interface.
-📜 Changelog
-Maintain a CHANGELOG.md file for significant changes.
-Example:
-# Changelog
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(100px, 50px) scale(1.2); }
+    }
 
-## [1.1.0] - 2026-08-10
+    /* Center Branding Logo */
+    .splash-center-content {
+      position: absolute;
+      top: 50%; left: 50%; 
+      transform: translate(-50%, -50%);
+      display: flex; flex-direction: column; align-items: center; 
+      z-index: 10;
+      text-align: center;
+      width: 100%;
+    }
+    .splash-center-logo {
+      width: 100%;
+      max-width: 600px; /* Adjust size based on your logo */
+      height: auto;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.08));
+      animation: superFloat 6s ease-in-out infinite; 
+    }
+    
+    @keyframes superFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-15px) scale(1.02); }
+    }
 
-### Added
-- Additional camp information
-- Improved mobile navigation
+    /* Info Badges */
+    .splash-info-row {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .splash-badge {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 12px 28px;
+      border-radius: 30px;
+      color: #141419; /* HARDCODED BLACK */
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
 
-### Changed
-- Updated event timeline
+    /* Social Footer */
+    .splash-footer {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 30px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #555555; /* HARDCODED DARK GREY */
+      z-index: 10;
+    }
 
-### Fixed
-- Mobile room directory scrolling
+    /* Reusable Light Glass Card Base */
+    .splash-glass-card {
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(24px) saturate(150%);
+      -webkit-backdrop-filter: blur(24px) saturate(150%);
+      border: 1px solid rgba(255, 255, 255, 1);
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255,255,255,0.8);
+      color: #141419; /* HARDCODED BLACK */
+    }
 
-## [1.0.0] - 2026-08-01
+    /* Upcoming Event / Countdown (Bottom Left) */
+    .splash-event-widget {
+      position: absolute; top: 40px; left: 40px;
+      padding: 24px 32px; display: flex; flex-direction: column; gap: 12px;
+      z-index: 10; min-width: 380px;
+    }
+    .splash-event-title { font-size: 0.9rem; font-weight: 700; color: var(--brand-orange); text-transform: uppercase; letter-spacing: 2px; }
+    .splash-event-name { font-size: 1.8rem; font-weight: 700; line-height: 1.2; color: #141419; /* HARDCODED BLACK */ }
+    .splash-cd-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; text-align: center; margin-top: 10px; }
+    .splash-cd-box { background: rgba(255,255,255,0.9); padding: 16px 8px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+    .splash-cd-val { font-size: 2.2rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; color: var(--brand-blue); }
+    .splash-cd-lbl { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #555555; /* HARDCODED DARK GREY */ margin-top: 8px; }
 
-### Added
-- Initial Youth Policy Lab SuperApp release
-👥 Ownership & Contributions
-The Youth Policy Lab SuperApp is maintained for the Youth Policy Lab programme.
-Contributors should:
-Keep participant information confidential where applicable.
-Avoid committing credentials or secrets.
-Test changes before deployment.
-Document significant changes.
-Follow the project's release and versioning conventions.
-📞 Support
-For technical issues, check:
-Browser console errors
-Google Sheets CSV availability
-Canva embed availability
-Network connectivity
-Correct file paths for logos
-Browser compatibility
-For data-related issues, verify the source Google Sheet before modifying application code.
-📌 Project Status
-Current status: Active development / event deployment
-Application type: Static Web Application
-Primary file: index.html
-Data source: Google Sheets CSV
-Handbook: Canva
-Deployment: Static hosting
-Recommended release format: Semantic Versioning (vMAJOR.MINOR.PATCH)
+    /* QR Code (Bottom Right) */
+    .splash-qr-container {
+      position: absolute; top: 40px; right: 40px;
+      padding: 20px; display: flex; flex-direction: row; align-items: center; gap: 20px;
+      z-index: 10;
+    }
+    .splash-qr-container img { width: 110px; height: 110px; border-radius: 16px; border: 4px solid white; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+    .splash-qr-text { display: flex; flex-direction: column; gap: 4px; }
+    .splash-qr-text h4 { font-size: 1.2rem; margin: 0; font-weight: 700; color: #141419; /* HARDCODED BLACK */ }
+    .splash-qr-text p { font-size: 0.9rem; margin: 0; color: #555555; /* HARDCODED DARK GREY */ font-weight: 500; }
+
+    /* Stealth Audio Toggle */
+    .stealth-audio-btn {
+      position: absolute;
+      bottom: 40px; right: 40px;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 20;
+      color: #555555; /* HARDCODED DARK GREY */
+      transition: all 0.3s ease;
+      outline: none;
+      font-size: 1.1rem;
+    }
+    
+    .stealth-audio-btn:hover {
+      background: rgba(255, 255, 255, 0.9);
+      color: #141419; /* HARDCODED BLACK */
+    }
+
+    .stealth-audio-btn.muted { animation: stealthPulse 2.5s infinite; }
+    @keyframes stealthPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.05); }
+      50% { box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); }
+    }
+
+    .stealth-audio-btn .icon-playing { display: none; }
+    .stealth-audio-btn:not(.muted) .icon-playing { display: block; }
+    .stealth-audio-btn:not(.muted) .icon-muted { display: none; }
+
+    /* Mobile Adaptations */
+    @media (max-width: 768px) {
+      .splash-qr-container { top: 20px; right: 20px; padding: 12px; flex-direction: column; gap: 12px; }
+      .splash-qr-text { display: none; }
+      .splash-qr-container img { width: 85px; height: 85px; }
+      .splash-event-widget { top: 20px; left: 20px; right: 140px; min-width: auto; padding: 16px; align-items: flex-start; }
+      .splash-event-name { font-size: 1.1rem; }
+      .splash-cd-grid { gap: 6px; }
+      .splash-cd-box { padding: 8px 4px; }
+      .splash-cd-val { font-size: 1.2rem; }
+      .splash-center-content { top: 55%; }
+      .splash-center-logo { max-width: 80%; }
+      .splash-info-row { flex-direction: column; gap: 10px; margin-top: 20px; }
+      .splash-badge { padding: 8px 16px; font-size: 0.85rem; }
+      .splash-footer { bottom: 20px; flex-direction: column; gap: 10px; font-size: 0.8rem; text-align: center; width: 100%; }
+      .stealth-audio-btn { width: 38px; height: 38px; }
+    }
+
+    /* ADMIN REMOTE MODE (?mode=admin) */
+    #admin-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+    body.mode-admin #admin-screen { display: flex; }
+    body.mode-admin > *:not(#admin-screen) { display: none !important; }
+
+    /* MOBILE RESPONSIVE ADAPTATIONS */
+    @media (max-width: 1024px) {
+      .sticky-toolbar { flex-direction: column; padding: 12px 20px; gap: 12px; }
+      .toolbar-right { justify-content: center; }
+      .search-wrapper { max-width: 100%; width: 100%; flex: 1; }
+      .viewport { padding: 20px 10px; perspective: none; }
+      .quick-jump-bar { top: 180px; }
+      .floor-container { transform: none !important; padding: 20px 15px; border-radius: 16px; overflow-x: auto; scroll-margin-top: 180px; }
+      .room-block:hover { transform: none; z-index: 1; }
+      .room-row { min-width: 600px; }
+    }
+
+    @media (max-width: 768px) {
+      .main-header { padding: 20px 16px; }
+      .header-top-bar { flex-direction: column; gap: 16px; }
+      .header-left { justify-content: center; width: 100%; position: relative; }
+      .header-right { justify-content: center; width: 100%; }
+      .theme-toggle { position: absolute; top: 0; right: 0; width: 38px; height: 38px; font-size: 1rem; }
+      .lang-select { position: absolute; top: 0; right: 46px; height: 38px; font-size: 0.8rem; padding: 0 8px; }
+      .brand-logo { height: 45px; }
+      
+      .sticky-toolbar { padding: 10px 12px; }
+      
+      .tab-nav { width: 100%; display: flex; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+      .tab-nav::-webkit-scrollbar { display: none; }
+      .tab-nav button { flex-shrink: 0; padding: 8px 12px; font-size: 0.8rem; }
+      .filter-group { display: flex !important; overflow-x: auto; max-width: 100%; width: 100%; -webkit-overflow-scrolling: touch; padding: 4px; gap: 6px; }
+      .filter-btn { flex-shrink: 0; padding: 6px 12px; font-size: 0.8rem; }
+      .controls { display: none !important; } 
+      .search-wrapper { width: 100%; }
+      .handbook-wrapper, .timeline-wrapper, .packing-wrapper, .rules-wrapper, .grid-2 { padding: 16px 12px; }
+      .grid-2 { grid-template-columns: 1fr !important; }
+      .canva-embed-container { max-width: 100%; }
+      .quick-jump-bar { top: 210px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SCROLLING HEADER -->
+  <header class="main-header">
+    <div class="header-top-bar">
+      <!-- TOP LEFT: LOGO -->
+      <div class="header-left">
+        <img src="logo-light.png" alt="Youth Policy Lab Logo" class="brand-logo" id="brandLogo" onerror="this.style.display='none'; document.getElementById('fallbackTitle').style.display='block';">
+        <h1 id="fallbackTitle" style="display:none;"><span class="brand-hl-1">Youth</span> <span class="brand-hl-2">Policy</span> <span class="brand-hl-3">Lab</span></h1>
+      </div>
+
+      <!-- MIDDLE: COUNTDOWN TIMER OR LIVE TICKER -->
+      <div class="countdown-section" id="countdownSection">
+        
+        <!-- Standard Countdown View -->
+        <div id="countdownView" style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+          <div class="countdown-label" id="countdownLabel" data-i18n="cd_label">Event Starts In</div>
+          <div class="countdown-timer" id="countdownTimer">
+            <div class="countdown-unit"><span class="countdown-value" id="cd-days">00</span><span class="countdown-unit-label" data-i18n="cd_days">Days</span></div>
+            <div class="countdown-separator">:</div>
+            <div class="countdown-unit"><span class="countdown-value" id="cd-hours">00</span><span class="countdown-unit-label" data-i18n="cd_hours">Hours</span></div>
+            <div class="countdown-separator">:</div>
+            <div class="countdown-unit"><span class="countdown-value" id="cd-mins">00</span><span class="countdown-unit-label" data-i18n="cd_mins">Mins</span></div>
+            <div class="countdown-separator">:</div>
+            <div class="countdown-unit"><span class="countdown-value" id="cd-secs">00</span><span class="countdown-unit-label" data-i18n="cd_secs">Secs</span></div>
+          </div>
+          <div class="countdown-date">14 Aug 2026 · 9:00 AM MYT</div>
+        </div>
+
+        <!-- Dynamic Live Ticker View -->
+        <div id="liveTickerView" style="display: none; flex-direction: column; align-items: center; gap: 4px; background: var(--surface-color); padding: 10px 24px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-soft); backdrop-filter: var(--glass-blur);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+            <div class="status-dot" style="background: var(--brand-orange); box-shadow: 0 0 8px var(--brand-orange); animation: pulse 1.5s infinite;"></div>
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--brand-orange); letter-spacing: 1px; text-transform: uppercase;">Live Now</span>
+          </div>
+          <div id="tickerActivity" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); text-align: center; max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Activity Title</div>
+          <div id="tickerVenue" style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">📍 Venue</div>
+        </div>
+
+      </div>
+
+      <!-- TOP RIGHT: SYNC STATUS, LANG & LIGHT/DARK TOGGLE -->
+      <div class="header-right">
+        <div id="sync-status" class="status-badge dir-tools">
+          <div class="status-dot"></div>
+          <span>Connecting...</span>
+          <button id="manualRefreshBtn" class="refresh-btn" title="Force Refresh Data">🔄</button>
+        </div>
+        
+        <select id="langSwitcher" class="lang-select">
+          <option value="en">EN</option>
+          <option value="zh">中</option>
+          <option value="ms">BM</option>
+        </select>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- STICKY NAV TOOLBAR -->
+  <nav class="sticky-toolbar">
+    <div class="tab-nav">
+      <!-- Sequence Reordered to User Specification -->
+      <button class="active" onclick="switchTab('hub')" data-i18n="nav_hub">Hub</button>
+      <button onclick="switchTab('rules')" data-i18n="nav_rules">Camp Rules</button>
+      <button onclick="switchTab('packing')" data-i18n="nav_pack">Packing List</button>
+      <button onclick="switchTab('timeline')" data-i18n="nav_time">Timeline</button>
+      <button onclick="switchTab('handbook')" data-i18n="nav_hand">Handbook</button>
+      <button onclick="switchTab('directory')" data-i18n="nav_dir">Hostel Directory</button>
+      <button onclick="switchTab('groups')" data-i18n="nav_groups">Groups</button>
+    </div>
+
+    <!-- Directory Tools -->
+    <div class="toolbar-right dir-tools" id="dirToolsNav">
+      <div class="search-wrapper">
+        <input type="text" id="searchInput" data-i18n-ph="dir_search" placeholder="Search participant name..." autocomplete="off">
+        <button id="clearSearchBtn" class="clear-search-btn" aria-label="Clear search">✕</button>
+      </div>
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all" data-i18n="dir_all">All</button>
+        <button class="filter-btn" data-filter="vacant" data-i18n="dir_vac">🟢 Vacant</button>
+        <button class="filter-btn" data-filter="vip" data-i18n="dir_vip">⭐ VIPs</button>
+        <button class="filter-btn" data-filter="boys" data-i18n="dir_boys">👦 Boys</button>
+        <button class="filter-btn" data-filter="girls" data-i18n="dir_girls">👧 Girls</button>
+      </div>
+      <div class="controls">
+        <button class="btn active" onclick="setView('3d')" data-i18n="dir_3d">3D</button>
+        <button class="btn" onclick="setView('2d')" data-i18n="dir_flat">Flat</button>
+      </div>
+    </div>
+
+    <!-- Packing List Tools -->
+    <div class="toolbar-right packing-tools" id="packingToolsNav">
+      <button class="btn" onclick="window.print()" data-i18n="tool_print">🖨️ Print / PDF</button>
+      <button class="btn" onclick="resetPackingList()" style="color: var(--brand-orange)" data-i18n="tool_reset">🔄 Reset</button>
+    </div>
+  </nav>
+
+  <!-- TAB: HUB (Wi-Fi, SOS, Commute) - SET AS DEFAULT ACTIVE -->
+  <div class="tab-content active" id="tab-hub">
+    <div class="grid-2">
+      <!-- Wi-Fi -->
+      <div class="glass-card">
+        <h3 data-i18n="hub_wifi">📶 Wi-Fi Quick-Connect</h3>
+        <p style="color: var(--text-secondary); margin: 10px 0;" data-i18n="hub_wifi_d">Connect to the official event network.</p>
+        <div style="background: var(--surface-secondary); padding: 15px; border-radius: 10px; text-align: center; font-weight: 700; letter-spacing: 1px; font-size: 1.2rem; margin-bottom: 10px;">
+          Buer or The Only Space
+        </div>
+        <button class="btn-primary" onclick="navigator.clipboard.writeText('buer6111'); showToast('Password copied!');" data-i18n="hub_wifi_btn">Copy Password</button>
+      </div>
+
+      <!-- Emergency SOS -->
+      <div class="glass-card">
+        <h3 data-i18n="hub_sos">🚨 Emergency SOS & Contacts</h3>
+        <p style="color: var(--text-secondary); margin: 10px 0;" data-i18n="hub_sos_d">Tap to call directly.</p>
+        <a href="tel:+60124630210" class="sos-btn"><span data-i18n="hub_sos_1">🩺 Medical Support</span> <span>📞</span></a>
+        <a href="tel:+60169379378" class="sos-btn"><span data-i18n="hub_sos_2">🛡️ Camp Security</span> <span>📞</span></a>
+        <a href="tel:+60128182270" class="sos-btn"><span data-i18n="hub_sos_3">📋 Committee Hotdesk</span> <span>📞</span></a>
+      </div>
+    </div>
+    
+      <!-- Transit & Parking Guide -->
+    <div class="glass-card" style="max-width: 1050px; width: calc(100% - 40px); margin: 0 20px 20px 20px;">
+      <h3 data-i18n="hub_park_title">🚗 Transit & Parking Info</h3>
+      
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px;">
+        
+        <!-- YMCA Parking Info -->
+        <div style="flex: 1; min-width: 260px; background: rgba(0, 122, 255, 0.08); border: 1px solid rgba(0, 122, 255, 0.3); padding: 20px; border-radius: 16px;">
+          <h4 style="color: var(--brand-blue); margin-bottom: 12px; font-size: 1.05rem;" data-i18n="hub_park_p_title">🅿️ YMCA Parking</h4>
+          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);">
+            <li style="display: flex; align-items: flex-start; gap: 8px;"><span>🪙</span> <span data-i18n="hub_park_p1"><strong>RM3 Flat Rate</strong> per entry</span></li>
+            <li style="display: flex; align-items: flex-start; gap: 8px;"><span>🏎️</span> <span data-i18n="hub_park_p2">First-come, first-serve basis</span></li>
+            <li style="display: flex; align-items: flex-start; gap: 8px;"><span>🎫</span> <span data-i18n="hub_park_p3">Validate car plate at reception</span></li>
+            <li style="display: flex; align-items: flex-start; gap: 8px;"><span>⏱️</span> <span data-i18n="hub_park_p4">Must exit within 10 mins of validation</span></li>
+          </ul>
+        </div>
+
+        <!-- Public Transport Info -->
+        <div style="flex: 1; min-width: 260px; background: rgba(0, 200, 83, 0.08); border: 1px solid rgba(0, 200, 83, 0.3); padding: 20px; border-radius: 16px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h4 style="color: var(--brand-green); margin-bottom: 12px; font-size: 1.05rem;" data-i18n="hub_park_t_title">🚆 Public Transport</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0 0 16px 0; line-height: 1.6;" data-i18n="hub_park_t1">
+              YMCA is walking distance to <strong>KL Sentral</strong>, the main transportation hub. 
+            </p>
+          </div>
+          <div style="background: var(--brand-green); color: white; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; text-align: center;" data-i18n="hub_park_t2">
+            🌟 Highly Recommended
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Commute Guide -->
+    <div class="glass-card" style="max-width: 1050px; width: calc(100% - 40px); margin: 0 20px 30px 20px;">
+      <h3 data-i18n="hub_comm">🚆 Monorail Commute Guide</h3>
+      <p style="color: var(--text-secondary); margin-bottom: 16px;" data-i18n="hub_comm_d">Route from YMCA Hostel to Event Venue.</p>
+      
+      <!-- Embedded YouTube Short - Optimized for Vertical Mobile Display -->
+      <div style="width: 100%; max-width: 315px; aspect-ratio: 9 / 16; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); background: var(--surface-secondary); margin: 0 auto 16px auto;">
+        <iframe 
+          src="https://www.youtube.com/embed/htVRG8D7xnc" 
+          style="width: 100%; height: 100%; border: none;" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: CAMP RULES -->
+  <div class="tab-content" id="tab-rules">
+    <div class="rules-wrapper">
+      <div class="rules-spirit-card">
+        <div class="spirit-title" data-i18n="r_spirit">YOUTH LEADERSHIP SPIRIT</div>
+        <div class="spirit-pillars">
+          <span class="spirit-pillar" data-i18n="r_sp1">Learning</span>
+          <span class="spirit-pillar" data-i18n="r_sp2">Critical Thinking</span>
+          <span class="spirit-pillar" data-i18n="r_sp3">Service</span>
+          <span class="spirit-pillar" data-i18n="r_sp4">Leadership</span>
+        </div>
+      </div>
+
+      <div class="alert-banner">
+        <h4 data-i18n="r_pro_title">🚫 Section 6: Zero-Tolerance Rules</h4>
+        <div class="tag-cloud">
+          <span class="prohibited-tag" data-i18n="r_pr1">❌ Gambling</span>
+          <span class="prohibited-tag" data-i18n="r_pr2">❌ Violence & Bullying</span>
+          <span class="prohibited-tag" data-i18n="r_pr3">❌ Drugs & Dangerous Items</span>
+          <span class="prohibited-tag" data-i18n="r_pr4">❌ Drunkenness</span>
+          <span class="prohibited-tag" data-i18n="r_pr5">❌ Smoking</span>
+          <span class="prohibited-tag" data-i18n="r_pr6">❌ Cyberbullying</span>
+          <span class="prohibited-tag" data-i18n="r_pr7">❌ Unauthorized Absence</span>
+        </div>
+      </div>
+
+      <div class="rules-accordion">
+        <div class="rule-card active">
+          <div class="rule-header" onclick="toggleRuleCard(this)">
+            <span data-i18n="r_sec1">1. Respect & Unity</span><span class="rule-arrow">▼</span>
+          </div>
+          <div class="rule-body">
+            <div class="rule-item"><strong data-i18n="r_1_1_t">1.1 Mutual Respect</strong><span data-i18n="r_1_1_d">Respect every camper, committee member, mentor, and guest.</span></div>
+            <div class="rule-item"><strong data-i18n="r_1_2_t">1.2 Team Spirit</strong><span data-i18n="r_1_2_d">Actively participate in group activities, support each other.</span></div>
+            <div class="rule-item"><strong data-i18n="r_1_3_t">1.3 Youth Leadership Image</strong><span data-i18n="r_1_3_d">Demonstrate responsibility, integrity, and discipline.</span></div>
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-header" onclick="toggleRuleCard(this)">
+            <span data-i18n="r_sec2">2. Discipline & Attendance</span><span class="rule-arrow">▼</span>
+          </div>
+          <div class="rule-body">
+            <div class="rule-item"><strong data-i18n="r_2_1_t">2.1 Punctuality</strong><span data-i18n="r_2_1_d">Attend all sessions on time. Early departures require prior approval.</span></div>
+            <div class="rule-item"><strong data-i18n="r_2_2_t">2.2 Participation</strong><span data-i18n="r_2_2_d">Engage fully in lectures, forums, and workshops.</span></div>
+            <div class="rule-item"><strong data-i18n="r_2_3_t">2.3 Directives</strong><span data-i18n="r_2_3_d">Comply with committee instructions.</span></div>
+            <div class="rule-item"><strong data-i18n="r_2_4_t">2.4 Night Curfew (12:00 AM)</strong><span data-i18n="r_2_4_d">Return to accommodation before 12:00 AM.</span></div>
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-header" onclick="toggleRuleCard(this)">
+            <span data-i18n="r_sec3">3. Safety Guidelines</span><span class="rule-arrow">▼</span>
+          </div>
+          <div class="rule-body">
+            <div class="rule-item"><strong data-i18n="r_3_1_t">3.1 Departure Rules</strong><span data-i18n="r_3_1_d">Do not leave the camp premises without explicit permission.</span></div>
+            <div class="rule-item"><strong data-i18n="r_3_2_t">3.2 Personal Safety</strong><span data-i18n="r_3_2_d">Follow safety protocols during activities.</span></div>
+            <div class="rule-item"><strong data-i18n="r_3_3_t">3.3 Buddy System</strong><span data-i18n="r_3_3_d">Travel with a partner/group at all times.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pledge-card">
+        <h3 data-i18n="r_pl_title">📝 Camper Pledge</h3>
+        <div class="pledge-box" data-i18n="r_pl_box">
+          I pledge to participate in "Youth Policy Lab 2026" with an active, open, and responsible mindset. I will abide by all camp rules.
+        </div>
+        <label class="check-item">
+          <input type="checkbox" id="chk_rules_pledge" onchange="togglePledge(this)">
+          <div class="check-item-text">
+            <span class="item-title" data-i18n="r_pl_chkT">I have read, understood, and agree to abide by all camp rules.</span>
+            <span class="item-desc" data-i18n="r_pl_chkD">Clicking this acknowledges your digital pledge.</span>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: PACKING LIST -->
+  <div class="tab-content" id="tab-packing">
+    <div class="packing-wrapper">
+      <div class="packing-hero">
+        <div class="progress-container">
+          <div class="progress-header">
+            <span id="p-prog-title" data-i18n="pack_prog">🎒 Packing Progress</span>
+            <span id="p-prog-val">0 / 0 (0%)</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="p-prog-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="packing-grid">
+        <!-- Clothing -->
+        <div class="packing-card">
+          <h3><span class="icon">👕</span> <span data-i18n="pack_cat1">Clothing & Attire</span></h3>
+          <div class="checklist-group">
+            <label class="check-item"><input type="checkbox" id="chk_c1"><div class="check-item-text"><span class="item-title" data-i18n="p_c1_t">Opening & Closing Ceremony Outfit</span><span class="item-desc" data-i18n="p_c1_d">Camp T-Shirt + Long Pants</span></div></label>
+            <label class="check-item"><input type="checkbox" id="chk_c2"><div class="check-item-text"><span class="item-title" data-i18n="p_c2_t">Daily Clothes (3D2N)</span><span class="item-desc" data-i18n="p_c2_d">Sufficient changes. Long pants MANDATORY during activities</span></div></label>
+            <label class="check-item"><input type="checkbox" id="chk_c3"><div class="check-item-text"><span class="item-title" data-i18n="p_c3_t">Semi-Formal Outfit (1 Set)</span><span class="item-desc" data-i18n="p_c3_d">Collared shirt + pants/skirt + covered shoes (No tight clothes)</span></div></label>
+            <label class="check-item"><input type="checkbox" id="chk_c4"><div class="check-item-text"><span class="item-title" data-i18n="p_c4_t">Covered Shoes / Sports Shoes</span><span class="item-desc" data-i18n="p_c4_d">Closed-toe footwear required</span></div></label>
+          </div>
+        </div>
+        <!-- Essentials -->
+        <div class="packing-card">
+          <h3><span class="icon">🛁</span> <span data-i18n="pack_cat2">Personal Essentials</span></h3>
+          <div class="checklist-group">
+            <label class="check-item"><input type="checkbox" id="chk_p1"><div class="check-item-text"><span class="item-title" data-i18n="p_p1_t">Toiletries Kit</span><span class="item-desc" data-i18n="p_p1_d">Towel, toothbrush, toothpaste, body wash, hair dryer</span></div></label>
+            <label class="check-item"><input type="checkbox" id="chk_p2"><div class="check-item-text"><span class="item-title" data-i18n="p_p2_t">Water Bottle</span><span class="item-desc" data-i18n="p_p2_d">Reusable bottle for refills</span></div></label>
+            <label class="check-item"><input type="checkbox" id="chk_p3"><div class="check-item-text"><span class="item-title" data-i18n="p_p3_t">Touch 'n Go Card (Locals Only)</span><span class="item-desc" data-i18n="p_p3_d">Pre-reload funds for self-funded Monorail transit</span></div></label>
+            <label class="check-item"><input type="checkbox" id="chk_p4"><div class="check-item-text"><span class="item-title" data-i18n="p_p4_t">Pocket Cash</span><span class="item-desc" data-i18n="p_p4_d">Small amount of cash (~RM50)</span></div></label>
+            <label class="check-item"><input type="checkbox" id="chk_p5"><div class="check-item-text"><span class="item-title" data-i18n="p_p5_t">Umbrella or Raincoat</span><span class="item-desc" data-i18n="p_p5_d">Weather protection</span></div></label>
+            <label class="check-item"><input type="checkbox" id="chk_p6"><div class="check-item-text"><span class="item-title" data-i18n="p_p6_t">Sanitary Products</span><span class="item-desc" data-i18n="p_p6_d">If required</span></div></label>
+          </div>
+        </div>
+        <!-- Study & Health -->
+        <div class="packing-card">
+          <h3><span class="icon">📝</span> <span data-i18n="pack_cat3">Study & Health</span></h3>
+          <div class="checklist-group">
+            <label class="check-item"><input type="checkbox" id="chk_s1"><div class="check-item-text"><span class="item-title" data-i18n="p_s1_t">Notebook & Stationery</span><span class="item-desc" data-i18n="p_s1_d">Pens, notepad for policy workshops</span></div></label>
+            <label class="check-item"><input type="checkbox" id="chk_s2"><div class="check-item-text"><span class="item-title" data-i18n="p_s2_t">Chargers & Power Banks</span><span class="item-desc" data-i18n="p_s2_d">Keep your electronics powered</span></div></label>
+            <label class="check-item"><input type="checkbox" id="chk_m1"><div class="check-item-text"><span class="item-title" data-i18n="p_m1_t">Personal Medication</span><span class="item-desc" data-i18n="p_m1_d">Prepare according to personal medical needs</span></div></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-banner">
+        <h4 data-i18n="pack_pro">🚫 Prohibited Items</h4>
+        <div class="tag-cloud">
+          <span class="prohibited-tag" data-i18n="p_pro1">❌ Alcohol</span>
+          <span class="prohibited-tag" data-i18n="p_pro2">❌ Cigarettes & Vapes</span>
+          <span class="prohibited-tag" data-i18n="p_pro3">❌ Playing Cards & Gambling Gear</span>
+          <span class="prohibited-tag" data-i18n="p_pro4">❌ Dangerous Items</span>
+          <span class="prohibited-tag" data-i18n="p_pro5">❌ Loudspeakers & Audio Gear</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: EVENT TIMELINE -->
+  <div class="tab-content" id="tab-timeline">
+    <div class="timeline-wrapper" id="timeline-container">
+      <div id="timeline-loading" style="text-align: center; color: var(--text-secondary); padding: 40px; font-weight: 500;" data-i18n="time_load">
+        Loading Live Itinerary...
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: EVENT HANDBOOK -->
+  <div class="tab-content" id="tab-handbook">
+    <div class="handbook-wrapper">
+      <div class="canva-embed-container">
+        <iframe loading="lazy" src="https://www.canva.com/design/DAHRPS_ZU_o/CByP7RS412eexO5d8742dw/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen"></iframe>
+      </div>
+      <a href="https://www.canva.com/design/DAHRPS_ZU_o/CByP7RS412eexO5d8742dw/view?utm_content=DAHRPS_ZU_o&utm_campaign=designshare&utm_medium=embeds&utm_source=link" target="_blank" rel="noopener" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-top: 16px; transition: color 0.2s; display: inline-block;" data-i18n="hand_link">
+        Handbook View Link ↗
+      </a>
+    </div>
+  </div>
+  
+  <!-- TAB: DIRECTORY MAP -->
+  <div class="tab-content" id="tab-directory">
+    <div class="viewport" id="viewport">
+      <div class="quick-jump-bar">
+        <button class="quick-jump-btn" onclick="document.getElementById('floor-L3').scrollIntoView({behavior: 'smooth'})" data-i18n="dir_l3">Level 3</button>
+        <button class="quick-jump-btn" onclick="document.getElementById('floor-L2').scrollIntoView({behavior: 'smooth'})" data-i18n="dir_l2">Level 2</button>
+      </div>
+
+      <!-- LEVEL 3 -->
+      <div class="floor-container" id="floor-L3">
+        <div class="floor-title" data-i18n="dir_l3">Level 3</div>
+        <div class="wing-title">Wing C</div>
+        <div class="room-row">
+          <div class="room-block" data-room-type="corridor" style="min-width:40px;"><div class="face-top">EMG</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 312" data-room="312" data-room-type="double"><div class="face-top">312</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 311" data-room="311" data-room-type="twin"><div class="face-top">311</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 310" data-room="310" data-room-type="double"><div class="face-top">310</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 309" data-room="309" data-room-type="twin"><div class="face-top">309</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 307" data-room="307" data-room-type="twin"><div class="face-top">307</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 305" data-room="305" data-room-type="twin"><div class="face-top">305</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 304" data-room="304" data-room-type="double"><div class="face-top">304</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 303" data-room="303" data-room-type="twin"><div class="face-top">303</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 302" data-room="302" data-room-type="double"><div class="face-top">302</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 301" data-room="301" data-room-type="twin"><div class="face-top">301</div><div class="face-front"></div></div>
+          <div class="room-block" data-room-type="corridor" style="min-width:50px;"><div class="face-top">LIFT</div><div class="face-front"></div></div>
+        </div>
+
+        <div class="wing-title">Wing D</div>
+        <div class="room-row">
+          <div class="room-block" data-room-type="corridor" style="min-width:40px;"><div class="face-top">EMG</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 329" data-room="329" data-room-type="twin"><div class="face-top">329</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 328" data-room="328" data-room-type="double"><div class="face-top">328</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 327" data-room="327" data-room-type="twin"><div class="face-top">327</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 325" data-room="325" data-room-type="twin"><div class="face-top">325</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 323" data-room="323" data-room-type="twin"><div class="face-top">323</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 321" data-room="321" data-room-type="twin"><div class="face-top">321</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 320" data-room="320" data-room-type="double"><div class="face-top">320</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 319" data-room="319" data-room-type="twin"><div class="face-top">319</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 318" data-room="318" data-room-type="triple"><div class="face-top">318</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 317" data-room="317" data-room-type="triple"><div class="face-top">317</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 316" data-room="316" data-room-type="triple"><div class="face-top">316</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 315" data-room="315" data-room-type="triple"><div class="face-top">315</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 314" data-room="314" data-room-type="triple"><div class="face-top">314</div><div class="face-front"></div></div>
+          <div class="room-block" data-room-type="corridor" style="min-width:50px;"><div class="face-top">LIFT</div><div class="face-front"></div></div>
+        </div>
+      </div>
+
+      <!-- LEVEL 2 -->
+      <div class="floor-container" id="floor-L2">
+        <div class="floor-title" data-i18n="dir_l2">Level 2</div>
+        <div class="wing-title">Wing A</div>
+        <div class="room-row">
+          <div class="room-block" data-room-type="corridor" style="min-width:40px;"><div class="face-top">EMG</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 212" data-room="212" data-room-type="double"><div class="face-top">212</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 211" data-room="211" data-room-type="twin"><div class="face-top">211</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 210" data-room="210" data-room-type="double"><div class="face-top">210</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 209" data-room="209" data-room-type="twin"><div class="face-top">209</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 208" data-room="208" data-room-type="twin"><div class="face-top">208</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 207" data-room="207" data-room-type="twin"><div class="face-top">207</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 206" data-room="206" data-room-type="twin"><div class="face-top">206</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 205" data-room="205" data-room-type="double"><div class="face-top">205</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 204" data-room="204" data-room-type="twin"><div class="face-top">204</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 203" data-room="203" data-room-type="double"><div class="face-top">203</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 202" data-room="202" data-room-type="double"><div class="face-top">202</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 201" data-room="201" data-room-type="twin"><div class="face-top">201</div><div class="face-front"></div></div>
+          <div class="room-block" data-room-type="corridor" style="min-width:50px;"><div class="face-top">LIFT</div><div class="face-front"></div></div>
+        </div>
+
+        <div class="wing-title">Wing B</div>
+        <div class="room-row">
+          <div class="room-block" data-room-type="corridor" style="min-width:40px;"><div class="face-top">EMG</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 229" data-room="229" data-room-type="twin"><div class="face-top">229</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 228" data-room="228" data-room-type="double"><div class="face-top">228</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 227" data-room="227" data-room-type="twin"><div class="face-top">227</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 226" data-room="226" data-room-type="twin"><div class="face-top">226</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 225" data-room="225" data-room-type="twin"><div class="face-top">225</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 224" data-room="224" data-room-type="twin"><div class="face-top">224</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 223" data-room="223" data-room-type="twin"><div class="face-top">223</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 222" data-room="222" data-room-type="twin"><div class="face-top">222</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 221" data-room="221" data-room-type="twin"><div class="face-top">221</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 220" data-room="220" data-room-type="double"><div class="face-top">220</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 219" data-room="219" data-room-type="twin"><div class="face-top">219</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 218" data-room="218" data-room-type="twin"><div class="face-top">218</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 217" data-room="217" data-room-type="twin"><div class="face-top">217</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 216" data-room="216" data-room-type="twin"><div class="face-top">216</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 215" data-room="215" data-room-type="twin"><div class="face-top">215</div><div class="face-front"></div></div>
+          <div class="room-block" tabindex="0" role="button" aria-label="Room 214" data-room="214" data-room-type="twin"><div class="face-top">214</div><div class="face-front"></div></div>
+          <div class="room-block" data-room-type="corridor" style="min-width:50px;"><div class="face-top">LIFT</div><div class="face-front"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: GROUPS (NEW TAB) -->
+  <div class="tab-content" id="tab-groups">
+    <div class="timeline-wrapper" id="groups-container" style="max-width: 1050px; padding: 30px 20px;">
+      <div id="groups-loading" style="text-align: center; color: var(--text-secondary); padding: 40px; font-weight: 500;" data-i18n="groups_load">
+        Loading Groups Data...
+      </div>
+    </div>
+  </div>
+
+  <!-- SPLASH SCREEN MODE (?mode=splash) -->
+  <div id="splash-screen">
+    <!-- Ambient Background Orbs -->
+    <div class="splash-orb orb-1"></div>
+    <div class="splash-orb orb-2"></div>
+    
+    <!-- Countdown / Upcoming Event (Top Left) -->
+    <div class="splash-glass-card splash-event-widget">
+      <div class="splash-event-title" id="sp-event-title">Starting Soon</div>
+      <div class="splash-event-name" id="sp-event-name">Youth Policy Lab 2026</div>
+      <div class="splash-cd-grid" id="sp-cd-grid">
+        <div class="splash-cd-box"><div class="splash-cd-val" id="sp-days">00</div><div class="splash-cd-lbl">Days</div></div>
+        <div class="splash-cd-box"><div class="splash-cd-val" id="sp-hours">00</div><div class="splash-cd-lbl">Hours</div></div>
+        <div class="splash-cd-box"><div class="splash-cd-val" id="sp-mins">00</div><div class="splash-cd-lbl">Mins</div></div>
+        <div class="splash-cd-box"><div class="splash-cd-val" id="sp-secs">00</div><div class="splash-cd-lbl">Secs</div></div>
+      </div>
+    </div>
+
+    <!-- QR Code (Top Right) -->
+    <div class="splash-glass-card splash-qr-container">
+      <div class="splash-qr-text">
+        <h4>Access SuperApp</h4>
+        <p>Scan for schedules & info</p>
+      </div>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://youthpolicylab.pages.dev" alt="SuperApp QR">
+    </div>
+
+    <!-- Center Cinematic Branding -->
+    <div class="splash-center-content">
+      <!-- Uses the light-mode logo version as requested -->
+      <img src="logo-light.png" alt="Youth Policy Lab Logo" class="splash-center-logo">
+      
+      <div class="splash-info-row">
+        <div class="splash-badge">🗓️ 2026年8月14日(五) 至16日(日)</div>
+        <div class="splash-badge">📍 Wisma Cosway, Bukit Bintang (8楼)</div>
+      </div>
+    </div>
+
+    <!-- Social Footer -->
+    <div class="splash-footer">
+      <span>📷 IG: @youthpolicylabpj</span>
+      <span>✉️ Email: youthpolicylabpj@gmail.com</span>
+    </div>
+    
+    <!-- Audio Player & Stealth Toggle -->
+    <audio id="bg-music" loop preload="auto">
+      <source src="background.ogg" type="audio/ogg">
+    </audio>
+    <button id="audio-toggle" class="stealth-audio-btn muted" aria-label="Toggle Background Music">
+      <span class="icon-muted">🔇</span>
+      <span class="icon-playing">🔊</span>
+    </button>
+  </div>
+
+  <!-- ADMIN REMOTE MODE (?mode=admin) -->
+  <div id="admin-screen">
+    <!-- Login Screen -->
+    <div class="glass-card" style="width: 100%; max-width: 400px; text-align: center;" id="admin-login">
+      <h3>🔒 Committee Access</h3>
+      <input type="password" id="admin-pin" class="input-field" placeholder="Enter PIN" style="text-align: center; font-size: 1.5rem; letter-spacing: 5px; margin-top: 20px;">
+      <button class="btn-primary" onclick="unlockAdmin()">Unlock Remote</button>
+    </div>
+
+    <!-- Live Data Dashboard -->
+    <div class="glass-card" id="admin-dashboard" style="display: none; width: 100%; max-width: 1200px; padding: 30px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px;">
+        <h2 style="color: var(--brand-blue); margin: 0;">⚙️ Logistic Master Control</h2>
+        <button class="btn-primary" style="width: auto; background: var(--brand-orange);" onclick="window.location.href='/'">Exit</button>
+      </div>
+
+      <!-- Logistics Scanner Tool -->
+      <div style="margin-bottom: 25px;">
+        <button class="btn-primary" style="background: var(--brand-green); width: 100%; font-size: 1.1rem; padding: 15px; box-shadow: 0 4px 15px rgba(0,200,83,0.3);" onclick="openScanner()">
+          📸 Scan Group Leader QR
+        </button>
+      </div>
+
+      <!-- Sheet Selector Tabs -->
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;" id="admin-tabs">
+        <button class="btn" style="background: var(--surface-secondary); border: 1px solid var(--border-color);" onclick="loadSheetData('FINALIZED Participant List!A1:Z500', this)">Participants</button>
+        <button class="btn" style="background: var(--surface-secondary); border: 1px solid var(--border-color);" onclick="loadSheetData('YMCA ROOM LIST!A1:Z500', this)">Room List</button>
+        <button class="btn" style="background: var(--surface-secondary); border: 1px solid var(--border-color);" onclick="loadSheetData('Group List for Logistic Faci!A1:Z500', this)">Group List</button>
+        <button class="btn" style="background: var(--surface-secondary); border: 1px solid var(--border-color);" onclick="loadSheetData('Meal Quotation!A1:Z500', this)">Meal Quotation</button>
+        <button class="btn" style="background: var(--surface-secondary); border: 1px solid var(--border-color);" onclick="loadSheetData('COMMITTEE DETAILS!A1:Z500', this)">Committee</button>
+        <button class="btn" style="background: var(--surface-secondary); border: 1px solid var(--border-color);" onclick="loadSheetData('Emergency Contact!A1:Z500', this)">Emergency</button>
+        <button class="btn" style="background: var(--surface-secondary); border: 1px solid var(--border-color);" onclick="loadSheetData('Early Departure Form!A1:Z500', this)">Early Departure</button>
+        <button class="btn" style="background: var(--surface-secondary); border: 1px solid var(--border-color);" onclick="loadSheetData('To Buy!A1:Z500', this)">To Buy</button>
+        <button class="btn" style="background: var(--surface-secondary); border: 1px solid var(--border-color);" onclick="loadSheetData('Punishment!A1:Z500', this)">Punishment</button>
+      </div>
+
+      <!-- Loading Indicator -->
+      <div id="admin-loading" style="display: none; font-weight: bold; color: var(--text-secondary); text-align: center; margin: 40px 0;">
+        <span style="font-size: 2rem; display: block; margin-bottom: 10px; animation: pulse 1.5s infinite;">🔄</span>
+        Syncing live data from Google Sheets...
+      </div>
+
+      <!-- Dynamic Data Table -->
+      <div style="overflow-x: auto; background: var(--surface-secondary); border: 1px solid var(--border-color); border-radius: 12px; max-height: 60vh;">
+        <table id="admin-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; color: var(--text-primary);">
+          <thead id="table-head" style="background-color: rgba(0,0,0,0.05); font-weight: 700; position: sticky; top: 0; backdrop-filter: blur(10px);"></thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Scanner Camera Modal -->
+  <!-- ================= 新增：掃描後跳出的物資核銷彈窗 ================= -->
+  <div id="scanner-modal-overlay" class="room-modal-overlay">
+    <!-- 這個是原本的相機畫面 -->
+    <div class="room-modal-card" id="scanner-camera-card" style="display: flex; flex-direction: column; align-items: center; padding: 20px;">
+      <h3 style="margin-bottom: 15px; color: var(--text-primary);">Scan Leader QR Code</h3>
+      <div id="reader" style="width: 100%; max-width: 350px; border-radius: 12px; overflow: hidden; border: 2px solid var(--brand-blue); margin-bottom: 15px;"></div>
+      <button class="btn-primary" style="background: var(--surface-secondary); color: var(--text-primary); border: 1px solid var(--border-color); width: 100%;" onclick="closeScanner()">Cancel</button>
+    </div>
+
+    <!-- 這個是掃描成功後，跳出來讓你打勾的清單 -->
+    <div class="room-modal-card" id="checklist-card" style="display: none; flex-direction: column; padding: 20px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto;">
+      <h3 id="group-title" style="margin-bottom: 5px; color: var(--brand-blue); font-size: 1.5rem; text-align: center;">Group Name</h3>
+      <p style="text-align: center; color: var(--text-secondary); margin-bottom: 15px; font-size: 0.9rem;">Select items to distribute to the entire group.</p>
+      
+      <!-- 統一物資發放選項 -->
+      <div style="background: var(--surface-secondary); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+          <h4 style="margin-bottom: 10px; color: var(--brand-orange);">📦 Batch Distribution</h4>
+          <label class="check-item" style="display: flex; margin-bottom: 10px;">
+              <input type="checkbox" id="chk-all-breakfast" style="margin-right: 10px; width: 22px; height: 22px;">
+              <span style="font-size: 1.1rem;">🍳 Day 1 Breakfast (All Members)</span>
+          </label>
+          <label class="check-item" style="display: flex; margin-bottom: 10px;">
+              <input type="checkbox" id="chk-all-lunch" style="margin-right: 10px; width: 22px; height: 22px;">
+              <span style="font-size: 1.1rem;">🍱 Day 1 Lunch (All Members)</span>
+          </label>
+          <label class="check-item" style="display: flex;">
+              <input type="checkbox" id="chk-all-dinner" style="margin-right: 10px; width: 22px; height: 22px;">
+              <span style="font-size: 1.1rem;">🍛 Day 1 Dinner (All Members)</span>
+          </label>
+      </div>
+
+      <!-- 個別組員清單 (將透過 JS 動態生成) -->
+      <h4 style="margin-bottom: 10px; color: var(--brand-green);">👥 Individual Members</h4>
+      <div id="member-checklist-container" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+          <!-- 這裡會動態載入該組的組員名單 -->
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: auto;">
+          <button class="btn-primary" style="flex: 1; background: var(--surface-secondary); color: var(--text-primary); border: 1px solid var(--border-color);" onclick="closeScanner()">Cancel</button>
+          <button class="btn-primary" style="flex: 2; background: var(--brand-blue);" onclick="submitDistribution()">✅ Confirm & Sync</button>
+      </div>
+    </div>
+  </div>
+  <!-- ================= 彈窗代碼結束 ================= -->
+
+  <!-- Overlays -->
+  <div id="tooltip"></div>
+
+  <!-- Dictionary & Scripts -->
+  <script>
+    // --- DICTIONARY ---
+    const i18n = {
+      "cd_label": { "en": "Event Starts In", "zh": "活动倒数", "ms": "Acara Bermula Dalam" },
+      "cd_days": { "en": "Days", "zh": "天", "ms": "Hari" },
+      "cd_hours": { "en": "Hours", "zh": "小时", "ms": "Jam" },
+      "cd_mins": { "en": "Mins", "zh": "分钟", "ms": "Minit" },
+      "cd_secs": { "en": "Secs", "zh": "秒", "ms": "Saat" },
+      "sync_conn": { "en": "Connecting...", "zh": "连接中...", "ms": "Menyambung..." },
+      "sync_synced": { "en": "Synced at", "zh": "已同步于", "ms": "Disegerakkan jam" },
+      "sync_offline": { "en": "⚠️ Offline", "zh": "⚠️ 离线", "ms": "⚠️ Luar Talian" },
+      "nav_dir": { "en": "Hostel Directory", "zh": "住宿指南", "ms": "Direktori Asrama" },
+      "nav_groups": { "en": "Groups", "zh": "分组名单", "ms": "Senarai Kumpulan" },
+      "groups_load": { "en": "Loading Groups Data...", "zh": "正在加载分组数据...", "ms": "Memuatkan Data Kumpulan..." },
+      "nav_time": { "en": "Timeline", "zh": "行程表", "ms": "Garis Masa" },
+      "nav_hub": { "en": "Hub", "zh": "资讯中心", "ms": "Hab" },
+      "nav_eng": { "en": "Engage", "zh": "互动参与", "ms": "Penglibatan" },
+      "nav_hand": { "en": "Handbook", "zh": "活动手册", "ms": "Buku Panduan" },
+      "nav_pack": { "en": "Packing List", "zh": "行李清单", "ms": "Senarai Semak" },
+      "nav_rules": { "en": "Camp Rules", "zh": "营规", "ms": "Peraturan Kem" },
+      "dir_search": { "en": "Search participant name...", "zh": "搜索营员名字...", "ms": "Cari nama peserta..." },
+      "dir_all": { "en": "All", "zh": "全部", "ms": "Semua" },
+      "dir_vac": { "en": "🟢 Vacant", "zh": "🟢 空房", "ms": "🟢 Kosong" },
+      "dir_vip": { "en": "⭐ VIPs", "zh": "⭐ 贵宾", "ms": "⭐ VIP" },
+      "dir_boys": { "en": "👦 Boys", "zh": "👦 男生", "ms": "👦 Lelaki" },
+      "dir_girls": { "en": "👧 Girls", "zh": "👧 女生", "ms": "👧 Perempuan" },
+      "dir_3d": { "en": "3D", "zh": "3D", "ms": "3D" },
+      "dir_flat": { "en": "Flat", "zh": "平面", "ms": "Rata" },
+      "dir_l3": { "en": "Level 3", "zh": "三楼", "ms": "Aras 3" },
+      "dir_l2": { "en": "Level 2", "zh": "二楼", "ms": "Aras 2" },
+      "time_load": { "en": "Loading Live Itinerary...", "zh": "正在加载最新行程...", "ms": "Memuatkan Jadual..." },
+      "tool_print": { "en": "🖨️ Print / PDF", "zh": "🖨️ 打印 / PDF", "ms": "🖨️ Cetak / PDF" },
+      "tool_reset": { "en": "🔄 Reset", "zh": "🔄 重置", "ms": "🔄 Set Semula" },
+      "hub_wifi": { "en": "📶 Wi-Fi Quick-Connect", "zh": "📶 无线网络连接", "ms": "📶 Sambungan Wi-Fi" },
+      "hub_wifi_d": { "en": "Connect to the official event network.", "zh": "连接到官方无线网络。", "ms": "Sambung ke rangkaian rasmi." },
+      "hub_wifi_btn": { "en": "Copy Password", "zh": "复制密码", "ms": "Salin Kata Laluan" },
+      "hub_sos": { "en": "🚨 Emergency SOS & Contacts", "zh": "🚨 紧急援助与联络", "ms": "🚨 Bantuan Kecemasan" },
+      "hub_sos_d": { "en": "Tap to call directly.", "zh": "点击直接拨打。", "ms": "Ketik untuk panggil terus." },
+      "hub_sos_1": { "en": "🩺 Medical Support", "zh": "🩺 医疗援助", "ms": "🩺 Bantuan Perubatan" },
+      "hub_sos_2": { "en": "🛡️ Camp Security", "zh": "🛡️ 营地保安", "ms": "🛡️ Keselamatan Kem" },
+      "hub_sos_3": { "en": "📋 Committee Hotdesk", "zh": "📋 筹委热线", "ms": "📋 Talian Urusetia" },
+      "hub_comm": { "en": "🚆 Monorail Commute Guide", "zh": "🚆 单轨火车通勤指南", "ms": "🚆 Panduan Komuter Monorel" },
+      "hub_comm_d": { "en": "Route from YMCA Hostel to Event Venue.", "zh": "从YMCA宿舍前往活动会场的路线。", "ms": "Laluan dari Asrama YMCA ke Tempat Acara." },
+      "hub_park_title": { "en": "🚗 Transit & Parking Info", "zh": "🚗 交通与停车指南", "ms": "🚗 Info Pengangkutan & Tempat Letak Kereta" },
+      "hub_park_p_title": { "en": "🅿️ YMCA Parking", "zh": "🅿️ YMCA 停车场", "ms": "🅿️ Tempat Letak Kereta YMCA" },
+      "hub_park_p1": { "en": "<strong>RM3 Flat Rate</strong> per entry", "zh": "每次进入 <strong>统一收费 RM3</strong>", "ms": "<strong>Kadar rata RM3</strong> setiap kemasukan" },
+      "hub_park_p2": { "en": "First-come, first-serve basis", "zh": "先到先得", "ms": "Berdasarkan siapa cepat dia dapat" },
+      "hub_park_p3": { "en": "Validate car plate at reception", "zh": "需在柜台验证车牌", "ms": "Sahkan nombor plat di kaunter" },
+      "hub_park_p4": { "en": "Must exit within 10 mins of validation", "zh": "验证后必须在 10 分钟内离开", "ms": "Mesti keluar dalam masa 10 minit selepas pengesahan" },
+      "hub_park_t_title": { "en": "🚆 Public Transport", "zh": "🚆 公共交通", "ms": "🚆 Pengangkutan Awam" },
+      "hub_park_t1": { "en": "YMCA is walking distance to <strong>KL Sentral</strong> (main transportation hub).", "zh": "YMCA 步行即可到达 <strong>KL Sentral</strong> (主要交通枢纽)。", "ms": "YMCA berada dalam jarak berjalan kaki ke <strong>KL Sentral</strong> (hab utama)." },
+      "hub_park_t2": { "en": "🌟 Highly Recommended", "zh": "🌟 强烈建议搭乘公交", "ms": "🌟 Sangat Digalakkan" },
+      "eng_qa": { "en": "💬 Live Q&A Portal", "zh": "💬 现场问答平台", "ms": "💬 Portal Soal Jawab" },
+      "eng_qa_d": { "en": "Submit your questions for the YB Forums. Selected questions will appear on the projector.", "zh": "向论坛嘉宾提问，被选中的问题将显示在投影仪上。", "ms": "Hantar soalan anda untuk Forum YB. Soalan terpilih akan dipaparkan." },
+      "eng_qa_n": { "en": "Your Name (Optional)", "zh": "你的名字 (选填)", "ms": "Nama Anda (Pilihan)" },
+      "eng_qa_ph": { "en": "Type your question here...", "zh": "在此输入你的问题...", "ms": "Taip soalan anda di sini..." },
+      "eng_qa_btn": { "en": "Submit Question", "zh": "提交问题", "ms": "Hantar Soalan" },
+      "eng_fb": { "en": "⭐ Post-Session Feedback", "zh": "⭐ 讲座反馈", "ms": "⭐ Maklum Balas Sesi" },
+      "eng_fb_d": { "en": "Rate the latest workshop", "zh": "为刚刚结束的讲座评分", "ms": "Nilaikan bengkel terkini" },
+      "eng_fb_ph": { "en": "Any additional comments?", "zh": "有任何补充意见吗？", "ms": "Ada komen tambahan?" },
+      "eng_fb_btn": { "en": "Submit Feedback", "zh": "提交反馈", "ms": "Hantar Maklum Balas" },
+      "hand_link": { "en": "Handbook View Link ↗", "zh": "在线阅读活动手册 ↗", "ms": "Pautan Buku Panduan ↗" },
+      "pack_prog": { "en": "🎒 Packing Progress", "zh": "🎒 准备进度", "ms": "🎒 Kemajuan Barang" },
+      "pack_cat1": { "en": "Clothing & Attire", "zh": "衣着用品", "ms": "Pakaian & Kelengkapan" },
+      "p_c1_t": { "en": "Opening & Closing Ceremony Outfit", "zh": "开幕及闭幕服装", "ms": "Pakaian Perasmian & Penutup" },
+      "p_c1_d": { "en": "Camp T-Shirt + Long Pants", "zh": "营衣 + 长裤", "ms": "T-Shirt Kem + Seluar Panjang" },
+      "p_c2_t": { "en": "Daily Clothes (3D2N)", "zh": "充足替换衣物 (3天2夜)", "ms": "Pakaian Harian (3H2M)" },
+      "p_c2_d": { "en": "Sufficient changes. Long pants MANDATORY during activities", "zh": "活动期间必须穿长裤", "ms": "Pakaian mencukupi. Seluar panjang DIWAJIBKAN semasa aktiviti" },
+      "p_c3_t": { "en": "Semi-Formal Outfit (1 Set)", "zh": "半正式服装 (1套)", "ms": "Pakaian Separa Formal (1 Set)" },
+      "p_c3_d": { "en": "Collared shirt + pants/skirt + covered shoes (No tight clothes)", "zh": "有领衬衫 + 长裤/长裙 + 包鞋 (禁止紧身衣)", "ms": "Kemeja berkolar + seluar/skirt + kasut tertutup" },
+      "p_c4_t": { "en": "Covered Shoes / Sports Shoes", "zh": "包鞋 / 运动鞋", "ms": "Kasut Tertutup / Kasut Sukan" },
+      "p_c4_d": { "en": "Closed-toe footwear required", "zh": "必须穿无露趾鞋", "ms": "Kasut tanpa jari terbuka diperlukan" },
+      "pack_cat2": { "en": "Personal Essentials", "zh": "个人用品", "ms": "Keperluan Peribadi" },
+      "p_p1_t": { "en": "Toiletries Kit", "zh": "洗漱用品", "ms": "Kit Penjagaan Diri" },
+      "p_p1_d": { "en": "Towel, toothbrush, toothpaste, body wash, hair dryer", "zh": "毛巾、牙刷、牙膏、沐浴露、吹风机", "ms": "Tuala, berus/ubat gigi, sabun, pengering rambut" },
+      "p_p2_t": { "en": "Water Bottle", "zh": "水壶", "ms": "Botol Air" },
+      "p_p2_d": { "en": "Reusable bottle for refills", "zh": "自备水壶以方便装水", "ms": "Botol boleh guna semula" },
+      "p_p3_t": { "en": "Touch 'n Go Card (Locals Only)", "zh": "Touch 'n Go卡 (本地生)", "ms": "Kad Touch 'n Go (Warga Tempatan)" },
+      "p_p3_d": { "en": "Pre-reload funds for self-funded Monorail transit", "zh": "请提前充值以自费搭乘单轨列车", "ms": "Tambah nilai awal untuk pengangkutan Monorel" },
+      "p_p4_t": { "en": "Pocket Cash", "zh": "零用现金", "ms": "Wang Saku" },
+      "p_p4_d": { "en": "Small amount of cash (~RM50)", "zh": "准备少量现金 (~RM50)", "ms": "Sejumlah wang tunai kecil (~RM50)" },
+      "p_p5_t": { "en": "Umbrella or Raincoat", "zh": "雨伞 / 雨衣", "ms": "Payung / Baju Hujan" },
+      "p_p5_d": { "en": "Weather protection", "zh": "防雨准备", "ms": "Perlindungan cuaca" },
+      "p_p6_t": { "en": "Sanitary Products", "zh": "卫生用品", "ms": "Produk Sanitari" },
+      "p_p6_d": { "en": "If required", "zh": "若需要", "ms": "Jika perlu" },
+      "pack_cat3": { "en": "Study & Health", "zh": "学习与医药", "ms": "Pembelajaran & Kesihatan" },
+      "p_s1_t": { "en": "Notebook & Stationery", "zh": "笔记本与文具", "ms": "Buku Nota & Alat Tulis" },
+      "p_s1_d": { "en": "Pens, notepad for policy workshops", "zh": "记录政策工作坊内容的文具", "ms": "Pen dan buku untuk bengkel polisi" },
+      "p_s2_t": { "en": "Chargers & Power Banks", "zh": "充电器与充电宝", "ms": "Pengecas & Power Bank" },
+      "p_s2_d": { "en": "Keep your electronics powered", "zh": "确保电子设备电量充足", "ms": "Pastikan peranti anda dicas" },
+      "p_m1_t": { "en": "Personal Medication", "zh": "个人常用药物", "ms": "Ubat Peribadi" },
+      "p_m1_d": { "en": "Prepare according to personal medical needs", "zh": "按个人医疗需求准备", "ms": "Sediakan mengikut keperluan kesihatan sendiri" },
+      "pack_pro": { "en": "🚫 Prohibited Items", "zh": "🚫 禁止携带物品", "ms": "🚫 Barang Larangan" },
+      "p_pro1": { "en": "❌ Alcohol", "zh": "❌ 酒精饮品", "ms": "❌ Minuman Beralkohol" },
+      "p_pro2": { "en": "❌ Cigarettes & Vapes", "zh": "❌ 香烟与电子烟", "ms": "❌ Rokok & Vape" },
+      "p_pro3": { "en": "❌ Playing Cards & Gambling Gear", "zh": "❌ 扑克牌及赌博用品", "ms": "❌ Kad Terup & Peralatan Judi" },
+      "p_pro4": { "en": "❌ Dangerous Items", "zh": "❌ 危险物品", "ms": "❌ Barang Berbahaya" },
+      "p_pro5": { "en": "❌ Loudspeakers & Audio Gear", "zh": "❌ 音箱或高音量设备", "ms": "❌ Pembesar Suara" },
+      "r_spirit": { "en": "YOUTH LEADERSHIP SPIRIT", "zh": "青年领袖精神", "ms": "SEMANGAT KEPIMPINAN BELIA" },
+      "r_sp1": { "en": "Learning", "zh": "学习", "ms": "Pembelajaran" },
+      "r_sp2": { "en": "Critical Thinking", "zh": "思辨", "ms": "Pemikiran Kritis" },
+      "r_sp3": { "en": "Service", "zh": "服务", "ms": "Perkhidmatan" },
+      "r_sp4": { "en": "Leadership", "zh": "领导", "ms": "Kepimpinan" },
+      "r_pro_title": { "en": "🚫 Section 6: Zero-Tolerance Rules", "zh": "🚫 第六部分: 严格禁止事项", "ms": "🚫 Seksyen 6: Peraturan Toleransi Sifar" },
+      "r_pr1": { "en": "❌ Gambling", "zh": "❌ 赌博行为", "ms": "❌ Perjudian" },
+      "r_pr2": { "en": "❌ Violence & Bullying", "zh": "❌ 暴力与霸凌", "ms": "❌ Keganasan & Buli" },
+      "r_pr3": { "en": "❌ Drugs & Dangerous Items", "zh": "❌ 毒品与危险物品", "ms": "❌ Dadah & Senjata" },
+      "r_pr4": { "en": "❌ Drunkenness", "zh": "❌ 酗酒", "ms": "❌ Mabuk" },
+      "r_pr5": { "en": "❌ Smoking", "zh": "❌ 非指定区域吸烟", "ms": "❌ Merokok" },
+      "r_pr6": { "en": "❌ Cyberbullying", "zh": "❌ 网络霸凌", "ms": "❌ Buli Siber" },
+      "r_pr7": { "en": "❌ Unauthorized Absence", "zh": "❌ 擅自离营", "ms": "❌ Keluar Tanpa Kebenaran" },
+      "r_sec1": { "en": "1. Respect & Unity", "zh": "1. 尊重与团结", "ms": "1. Hormat & Perpaduan" },
+      "r_1_1_t": { "en": "1.1 Mutual Respect", "zh": "1.1 互相尊重", "ms": "1.1 Saling Menghormati" },
+      "r_1_1_d": { "en": "Respect every camper, committee member, mentor, and guest.", "zh": "尊重每位营员、筹委、导师及嘉宾。", "ms": "Hormati setiap peserta, jawatankuasa, mentor dan tetamu." },
+      "r_1_2_t": { "en": "1.2 Team Spirit", "zh": "1.2 团队精神", "ms": "1.2 Semangat Berpasukan" },
+      "r_1_2_d": { "en": "Actively participate in group activities, support each other.", "zh": "积极参与小组活动，互相扶持。", "ms": "Sertai aktiviti kumpulan secara aktif, saling menyokong." },
+      "r_1_3_t": { "en": "1.3 Youth Leadership Image", "zh": "1.3 青年领袖形象", "ms": "1.3 Imej Kepimpinan Belia" },
+      "r_1_3_d": { "en": "Demonstrate responsibility, integrity, and discipline.", "zh": "展现负责任、诚信与纪律。", "ms": "Tunjukkan tanggungjawab, integriti dan disiplin." },
+      "r_sec2": { "en": "2. Discipline & Attendance", "zh": "2. 纪律与出席率", "ms": "2. Disiplin & Kehadiran" },
+      "r_2_1_t": { "en": "2.1 Punctuality", "zh": "2.1 守时", "ms": "2.1 Menepati Masa" },
+      "r_2_1_d": { "en": "Attend all sessions on time. Early departures require prior approval.", "zh": "准时出席所有环节。早退需提前获得批准。", "ms": "Hadir sesi tepat masa. Keluar awal perlu kelulusan." },
+      "r_2_2_t": { "en": "2.2 Participation", "zh": "2.2 参与度", "ms": "2.2 Penyertaan" },
+      "r_2_2_d": { "en": "Engage fully in lectures, forums, and workshops.", "zh": "全心投入讲座、论坛与工作坊。", "ms": "Libatkan diri sepenuhnya dalam kuliah, forum dan bengkel." },
+      "r_2_3_t": { "en": "2.3 Directives", "zh": "2.3 服从指示", "ms": "2.3 Arahan" },
+      "r_2_3_d": { "en": "Comply with committee instructions.", "zh": "遵守筹委的指示。", "ms": "Patuhi arahan jawatankuasa." },
+      "r_2_4_t": { "en": "2.4 Night Curfew", "zh": "2.4 晚间宵禁", "ms": "2.4 Perintah Berkurung" },
+      "r_2_4_d": { "en": "Return to accommodation before 12:00 AM.", "zh": "必须在午夜12点前返回宿舍。", "ms": "Kembali ke asrama sebelum 12:00 tengah malam." },
+      "r_sec3": { "en": "3. Safety Guidelines", "zh": "3. 安全守则", "ms": "3. Garis Panduan Keselamatan" },
+      "r_3_1_t": { "en": "3.1 Departure Rules", "zh": "3.1 离营规则", "ms": "3.1 Peraturan Keluar Kem" },
+      "r_3_1_d": { "en": "Do not leave the camp premises without explicit permission.", "zh": "未经明确许可，严禁擅自离开营地。", "ms": "Dilarang keluar dari kawasan kem tanpa kebenaran." },
+      "r_3_2_t": { "en": "3.2 Personal Safety", "zh": "3.2 个人安全", "ms": "3.2 Keselamatan Peribadi" },
+      "r_3_2_d": { "en": "Follow safety protocols during activities.", "zh": "在活动期间遵守安全规程。", "ms": "Patuhi protokol keselamatan semasa aktiviti." },
+      "r_3_3_t": { "en": "3.3 Buddy System", "zh": "3.3 结伴制度", "ms": "3.3 Sistem Buddy" },
+      "r_3_3_d": { "en": "Travel with a partner/group at all times.", "zh": "时刻与同伴或小组结伴同行。", "ms": "Sentiasa bergerak bersama rakan/kumpulan." },
+      "r_pl_title": { "en": "📝 Camper Pledge", "zh": "📝 营员承诺", "ms": "📝 Ikrar Peserta" },
+      "r_pl_box": { "en": "I pledge to participate in 'Youth Policy Lab 2026' with an active, open, and responsible mindset. I will abide by all camp rules.", "zh": "我承诺以积极、开放及负责任的心态参与“2026这Young说政事”，并遵守所有营规。", "ms": "Saya berikrar untuk menyertai 'Youth Policy Lab 2026' dengan minda aktif dan bertanggungjawab. Saya akan mematuhi semua peraturan kem." },
+      "r_pl_chkT": { "en": "I have read, understood, and agree to abide by all camp rules.", "zh": "我已阅读、理解并同意遵守所有营规。", "ms": "Saya telah membaca, memahami, dan bersetuju mematuhi peraturan." },
+      "r_pl_chkD": { "en": "Clicking this acknowledges your digital pledge.", "zh": "勾选此项即代表您签署电子承诺书。", "ms": "Klik ini menandakan ikrar digital anda." },
+      "mod_copy": { "en": "Copy Details", "zh": "复制详情", "ms": "Salin Butiran" },
+      "mod_close": { "en": "Close", "zh": "关闭", "ms": "Tutup" }
+    };
+
+    let lastSyncedTime = null;
+
+    // --- LANGUAGE SWITCHER LOGIC ---
+    const langSwitcher = document.getElementById('langSwitcher');
+    let currentLang = localStorage.getItem('ypl_lang') || 'en';
+    langSwitcher.value = currentLang;
+
+    function updateSyncStatusText() {
+      const statusBadge = document.getElementById('sync-status');
+      const statusSpan = statusBadge.querySelector('span');
+      const lang = localStorage.getItem('ypl_lang') || 'en';
+      
+      if (statusBadge.classList.contains('synced') && lastSyncedTime) {
+        const prefix = (i18n["sync_synced"] && i18n["sync_synced"][lang]) ? i18n["sync_synced"][lang] : "Synced at";
+        statusSpan.innerText = `${prefix} ${lastSyncedTime}`;
+      } else if (statusBadge.classList.contains('offline')) {
+        const offlineText = (i18n["sync_offline"] && i18n["sync_offline"][lang]) ? i18n["sync_offline"][lang] : "⚠️ Offline";
+        statusSpan.innerText = offlineText;
+      } else {
+        const connText = (i18n["sync_conn"] && i18n["sync_conn"][lang]) ? i18n["sync_conn"][lang] : "Connecting...";
+        statusSpan.innerText = connText;
+      }
+    }
+
+        function applyTranslations(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18n[key] && i18n[key][lang]) {
+          el.innerHTML = i18n[key][lang]; // Changed from innerText to innerHTML
+        }
+      });
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.getAttribute('data-i18n-ph');
+        if (i18n[key] && i18n[key][lang]) {
+          el.placeholder = i18n[key][lang];
+        }
+      });
+      updateSyncStatusText();
+    }
+
+    langSwitcher.addEventListener('change', (e) => {
+      const selectedLang = e.target.value;
+      localStorage.setItem('ypl_lang', selectedLang);
+      applyTranslations(selectedLang);
+    });
+
+    applyTranslations(currentLang);
+
+    // --- Theme Management ---
+    const themeToggle = document.getElementById('themeToggle');
+    const brandLogo = document.getElementById('brandLogo');
+    const currentTheme = localStorage.getItem('theme');
+    
+    if (currentTheme === 'dark') {
+      document.body.classList.add('dark-mode'); themeToggle.textContent = '☀️'; brandLogo.src = 'logo-dark.png';
+    } else {
+      themeToggle.textContent = '🌙'; brandLogo.src = 'logo-light.png';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      if (document.body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark'); themeToggle.textContent = '☀️'; brandLogo.src = 'logo-dark.png';
+      } else {
+        localStorage.setItem('theme', 'light'); themeToggle.textContent = '🌙'; brandLogo.src = 'logo-light.png';
+      }
+    });
+
+    // --- Tab Switching Logic ---
+    function switchTab(tabId) {
+      if (navigator.vibrate) navigator.vibrate(15);
+      
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+      document.querySelectorAll('.tab-nav button').forEach(btn => btn.classList.remove('active'));
+      
+      const btn = document.querySelector(`.tab-nav button[onclick="switchTab('${tabId}')"]`);
+      if (btn) btn.classList.add('active');
+
+      document.querySelectorAll('.toolbar-right').forEach(tb => tb.classList.remove('active'));
+      if (tabId === 'directory') {
+        document.getElementById('dirToolsNav').classList.add('active');
+      } else if (tabId === 'packing') {
+        document.getElementById('packingToolsNav').classList.add('active');
+      }
+    }
+
+    // --- Toast & Tooltip ---
+    function showToast(message, isAlert = false) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.style.background = isAlert ? 'var(--brand-orange)' : 'var(--brand-green)';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // --- Mode Routing (Splash & Admin) ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get('mode');
+
+    if (mode === 'splash') {
+      document.body.classList.add('mode-splash');
+    } else if (mode === 'admin') {
+      document.body.classList.add('mode-admin');
+    }
+
+    // --- ADMIN DASHBOARD LOGIC ---
+    const WORKER_URL = "https://broken-sun-7418.wyyctz9zt8.workers.dev";
+    const sheetCache = {}; // This stores data so we don't have to re-fetch!
+
+    function unlockAdmin() {
+      const pin = document.getElementById('admin-pin').value;
+      if (pin === 'YPL2026') {
+        document.getElementById('admin-login').style.display = 'none';
+        document.getElementById('admin-dashboard').style.display = 'block';
+        loadSheetData('FINALIZED Participant List!A1:Z500', document.querySelector('#admin-tabs button'));
+      } else { 
+        alert("Incorrect PIN"); 
+      }
+    }
+
+    async function loadSheetData(range, btnElement) {
+      if (btnElement) {
+        document.querySelectorAll('#admin-tabs button').forEach(b => {
+            b.style.background = 'var(--surface-secondary)'; b.style.color = 'var(--text-secondary)'; b.style.borderColor = 'var(--border-color)';
+        });
+        btnElement.style.background = 'var(--brand-blue)'; btnElement.style.color = 'white'; btnElement.style.borderColor = 'var(--brand-blue)';
+      }
+
+      const loadingEl = document.getElementById('admin-loading');
+      const headEl = document.getElementById('table-head');
+      const bodyEl = document.getElementById('table-body');
+
+      // 1. If we already fetched this sheet, load it instantly from cache!
+      if (sheetCache[range]) {
+        renderTable(sheetCache[range].values, headEl, bodyEl);
+        return; 
+      }
+
+      // 2. Fetch from Cloudflare
+      loadingEl.style.display = 'block';
+      headEl.innerHTML = '';
+      bodyEl.innerHTML = '';
+
+      try {
+        const response = await fetch(`${WORKER_URL}?range=${encodeURIComponent(range)}`);
+        const result = await response.json();
+        if (result.error) throw new Error(result.error);
+
+        sheetCache[range] = result; 
+        renderTable(result.values, headEl, bodyEl);
+      } catch (err) {
+        alert("Error loading sheet data: " + err.message);
+      } finally {
+        loadingEl.style.display = 'none';
+      }
+    }
+
+    // Helper function to draw the table instantly
+    function renderTable(rows, headEl, bodyEl) {
+        if (!rows || rows.length === 0) {
+          bodyEl.innerHTML = '<tr><td style="padding: 2rem; text-align: center;">No data found in this sheet.</td></tr>';
+          return;
+        }
+
+        const headers = rows[0];
+        let headerHtml = '<tr>';
+        headers.forEach(text => { headerHtml += `<th style="padding: 12px 16px; border-bottom: 2px solid var(--border-color); white-space: nowrap;">${text || ''}</th>`; });
+        headerHtml += '</tr>';
+        headEl.innerHTML = headerHtml;
+
+        let bodyHtml = '';
+        for (let i = 1; i < rows.length; i++) {
+          bodyHtml += '<tr style="border-bottom: 1px solid rgba(0,0,0,0.05); transition: background 0.2s;">';
+          for (let j = 0; j < headers.length; j++) { bodyHtml += `<td style="padding: 12px 16px; white-space: nowrap;">${rows[i][j] || ''}</td>`; }
+          bodyHtml += '</tr>';
+        }
+        bodyEl.innerHTML = bodyHtml;
+    }
+
+    // --- QR SCANNER LOGIC ---
+    let html5QrcodeScanner = null;
+
+    function openScanner() {
+      document.getElementById('scanner-modal-overlay').classList.add('active');
+      html5QrcodeScanner = new Html5Qrcode("reader");
+      const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+      
+      html5QrcodeScanner.start({ facingMode: "environment" }, config, onScanSuccess)
+      .catch((err) => {
+        alert("Camera error. Please ensure you have granted camera permissions to this website.");
+        closeScanner();
+      });
+    }
+
+    function closeScanner() {
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.stop().then(() => {
+          html5QrcodeScanner.clear();
+        }).catch(err => console.error("Failed to stop scanner", err));
+      }
+      document.getElementById('scanner-modal-overlay').classList.remove('active');
+    }
+
+  let currentScannedGroup = "";
+
+    function onScanSuccess(decodedText, decodedResult) {
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.pause(); // 掃到後先暫停相機
+      }
+      if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+      
+      // 假設 QR Code 掃出來的文字就是組別名稱，例如 "Group 1"
+      currentScannedGroup = decodedText;
+      
+      // 隱藏相機，顯示打勾清單
+      document.getElementById('scanner-camera-card').style.display = 'none';
+      document.getElementById('checklist-card').style.display = 'flex';
+      document.getElementById('group-title').innerText = currentScannedGroup;
+
+      // 生成假資料測試 (這裡未來會接 Google Sheets)
+      const memberContainer = document.getElementById('member-checklist-container');
+      memberContainer.innerHTML = `
+          <div style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <span><strong>Ali</strong> (Leader) - T-Shirt: L</span>
+              <input type="checkbox" style="width: 20px; height: 20px;" checked disabled title="Already collected">
+          </div>
+          <div style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <span><strong>Muthu</strong> - T-Shirt: M</span>
+              <input type="checkbox" style="width: 20px; height: 20px;">
+          </div>
+          <div style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <span><strong>Ah Kao</strong> - T-Shirt: S</span>
+              <input type="checkbox" style="width: 20px; height: 20px;">
+          </div>
+      `;
+    }
+
+    function submitDistribution() {
+        // 這裡會把打勾的資料送到 Google Sheets (目前先用 Alert 模擬)
+        alert(`Data for ${currentScannedGroup} is syncing to Google Sheets via Worker!`);
+        closeScanner();
+    }
+
+    function closeScanner() {
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.stop().then(() => {
+          html5QrcodeScanner.clear();
+        }).catch(err => console.error("Failed to stop scanner", err));
+      }
+      document.getElementById('scanner-modal-overlay').classList.remove('active');
+      // 恢復原始狀態
+      setTimeout(() => {
+          document.getElementById('scanner-camera-card').style.display = 'flex';
+          document.getElementById('checklist-card').style.display = 'none';
+      }, 300);
+    }
+
+    function submitQA(event) {
+      const btn = event.target;
+      const originalText = btn.innerText;
+      btn.innerText = "Submitting...";
+      setTimeout(() => {
+        btn.innerText = "Question Submitted! ✅";
+        btn.style.background = "var(--brand-green)";
+        setTimeout(() => { btn.innerText = originalText; btn.style.background = "var(--brand-blue)"; }, 3000);
+      }, 1000);
+    }
+
+    // --- Star Rating ---
+    document.querySelectorAll('.star').forEach(star => {
+      star.addEventListener('click', function() {
+        let value = this.getAttribute('data-value');
+        document.querySelectorAll('.star').forEach(s => {
+          s.classList.toggle('active', s.getAttribute('data-value') <= value);
+        });
+      });
+    });
+
+    // --- PAPAPARSE & DATA LOGIC ---
+    const DIR_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMmnBQIEjwVoJhvD9l8LelAodWCfdSg8v3z8dNcBt7PkMiNP5a13Ylw3foUnfQvWdzU2NaXWgGCJWA/pub?gid=546426841&single=true&output=csv';
+    const TIMELINE_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRGCH-pDLeS0Rc56C_TABl3uCTWyj8DSnEaxFEJi-l0b1C4eJE_ExobLPzpiHuu3-VMDyzxYXh4KUbA/pub?gid=1028971239&single=true&output=csv';
+    const GROUPS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMmnBQIEjwVoJhvD9l8LelAodWCfdSg8v3z8dNcBt7PkMiNP5a13Ylw3foUnfQvWdzU2NaXWgGCJWA/pub?gid=625570156&single=true&output=csv';
+    
+    let roomData = {};
+    window.timelineEvents = [];
+    const EVENT_START = new Date('2026-08-14T09:00:00+08:00');
+
+    function setView(mode) {
+      const viewport = document.getElementById('viewport');
+      const buttons = document.querySelectorAll('.controls .btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      if (mode === '2d') { viewport.classList.add('flat'); buttons[1].classList.add('active'); } 
+      else { viewport.classList.remove('flat'); buttons[0].classList.add('active'); }
+    }
+
+    // Parses string time range (e.g. "09:00 AM - 10:30 AM") against a given date 
+    function parseTimeRange(dateStr, timeRangeStr) {
+      if (!timeRangeStr) return null;
+      const times = timeRangeStr.split(/[-–—to]/i).map(t => t.trim());
+      const startStr = times[0];
+      const endStr = times.length > 1 ? times[1] : null;
+
+      const parseToDate = (tStr) => {
+        if (!tStr) return null;
+        let match = tStr.match(/(\d{1,2})[:.]?(\d{2})?\s*(am|pm)?/i);
+        if (!match) return null;
+        let hours = parseInt(match[1]);
+        let mins = parseInt(match[2] || "0");
+        let ampm = match[3] ? match[3].toLowerCase() : null;
+
+        if (ampm === 'pm' && hours < 12) hours += 12;
+        if (ampm === 'am' && hours === 12) hours = 0;
+        
+        // Inference logic if no AM/PM provided
+        if (!ampm && hours >= 1 && hours <= 7) hours += 12; 
+
+        let d = new Date(dateStr);
+        if (isNaN(d.getTime())) { d = new Date('2026-08-14'); }
+        d.setHours(hours, mins, 0, 0);
+        return d;
+      };
+
+      return { start: parseToDate(startStr), end: parseToDate(endStr) };
+    }
+
+    function loadDirectoryData() {
+      const statusBadge = document.getElementById('sync-status');
+      Papa.parse(DIR_CSV_URL, {
+        download: true, header: false, skipEmptyLines: true,
+        complete: function(results) {
+          roomData = {};
+          results.data.forEach(row => {
+            if (row.length >= 4) {
+              const name = row[0] ? row[0].trim() : '';
+              const gender = row[1] ? row[1].trim() : '';
+              const roomType = row[2] ? row[2].trim() : '';
+              const roomNo = row[3] ? row[3].toString().trim() : '';
+              const remarks = row[4] ? row[4].trim() : '';
+
+              if (/^\d{3}$/.test(roomNo)) {
+                if (!roomData[roomNo]) roomData[roomNo] = { type: roomType, remarks: remarks, occupants: [] };
+                if (name) roomData[roomNo].occupants.push({ name, gender });
+                if (remarks && !roomData[roomNo].remarks) roomData[roomNo].remarks = remarks;
+                if (roomType && !roomData[roomNo].type) roomData[roomNo].type = roomType;
+              }
+            }
+          });
+
+          document.querySelectorAll('.room-block[data-room]').forEach(block => {
+            const roomNo = block.getAttribute('data-room');
+            const data = roomData[roomNo];
+            if (data && data.occupants && data.occupants.length > 0) block.classList.add('occupied');
+            else block.classList.remove('occupied');
+          });
+
+          lastSyncedTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+          statusBadge.classList.remove('offline');
+          statusBadge.classList.add('synced');
+          updateSyncStatusText();
+        },
+        error: function() {
+          statusBadge.classList.remove('synced');
+          statusBadge.classList.add('offline');
+          updateSyncStatusText();
+        }
+      });
+    }
+
+    function loadTimelineData() {
+      Papa.parse(TIMELINE_CSV_URL, {
+        download: true, header: false, skipEmptyLines: true,
+        complete: function(results) { 
+          const container = document.getElementById('timeline-container');
+          let html = '';
+          window.timelineEvents = [];
+          let currentDateStr = "14 Aug 2026";
+
+          results.data.forEach(row => {
+            const cleanRow = row.map(cell => cell ? cell.trim() : '');
+            const nonEmptyCells = cleanRow.filter(cell => cell !== '');
+            if (nonEmptyCells.length === 0) return;
+            const rowStr = cleanRow.join(' ').toLowerCase();
+            if (rowStr.includes('time') && (rowStr.includes('activity') || rowStr.includes('event'))) return;
+
+            if (nonEmptyCells.length === 1) {
+              currentDateStr = nonEmptyCells[0];
+              html += `<div class="timeline-date-header">${nonEmptyCells[0]}</div>`;
+            } else {
+              let time = cleanRow[0] || ''; let activity = cleanRow[1] || ''; let venue = cleanRow[2] || ''; let remarks = cleanRow[3] || '';
+              if (!time && !activity && nonEmptyCells.length >= 2) { time = nonEmptyCells[0]; activity = nonEmptyCells[1]; venue = nonEmptyCells[2] || ''; remarks = nonEmptyCells[3] || ''; }
+              if (!activity && !time) return;
+
+              // Parse to Memory for the Live Ticker
+              let parsedTime = parseTimeRange(currentDateStr, time);
+              if (parsedTime && parsedTime.start) {
+                  window.timelineEvents.push({
+                      start: parsedTime.start,
+                      end: parsedTime.end,
+                      activity: activity,
+                      venue: venue
+                  });
+              }
+
+              html += `<div class="timeline-item"><div class="timeline-time">${time}</div><div class="timeline-content"><div class="timeline-title">${activity}</div>${venue ? `<div class="timeline-venue">📍 ${venue}</div>` : ''}${remarks ? `<div class="timeline-venue" style="color:var(--brand-blue)">🗣 ${remarks}</div>` : ''}</div></div>`;
+            }
+          });
+          container.innerHTML = html || `<div style="text-align:center; color:var(--text-secondary); font-weight:500;">Timeline data is empty.</div>`;
+        }
+      });
+    }
+
+    function loadGroupsData() {
+      Papa.parse(GROUPS_CSV_URL, {
+        download: true, 
+        header: false, // Parse as raw rows to handle vertical block structures
+        skipEmptyLines: true,
+        complete: function(results) { 
+          const container = document.getElementById('groups-container');
+          
+          if (results.data.length === 0) {
+            container.innerHTML = `<div style="text-align:center; color:var(--text-secondary); font-weight:500;">No data found.</div>`;
+            return;
+          }
+
+          const rawData = results.data;
+          const grouped = {};
+          let currentGroupName = null;
+          let memberIndex = 0; 
+
+          // 1. Parse the vertical block structure
+          for (let i = 0; i < rawData.length; i++) {
+            const row = rawData[i];
+            const col0 = row[0] ? row[0].trim() : ''; // e.g., Numbering, "领队:", "1", "2"
+            const col1 = row[1] ? row[1].trim() : ''; // e.g., Chinese Name
+            const col2 = row[2] ? row[2].trim() : ''; // e.g., English Name
+            
+            // Detect a Group Header (e.g., "Group 1(6 Pax)")
+            if (col0.toLowerCase().includes('group') || col1.toLowerCase().includes('group')) {
+              let groupString = col0.toLowerCase().includes('group') ? col0 : col1;
+              currentGroupName = groupString.split('(')[0].trim(); // Removes "(6 Pax)"
+              
+              if (!grouped[currentGroupName]) {
+                grouped[currentGroupName] = { leaders: [], members: [] };
+              }
+              memberIndex = 0; // Reset for the new group
+              continue;
+            }
+
+            // Detect and skip the sub-header row ("名字", "Name")
+            if (col1 === '名字' || col2 === 'Name' || col1.toLowerCase() === 'name') {
+              continue;
+            }
+
+            // If we are currently inside a group block and have a valid name
+            if (currentGroupName && (col1 || col2)) {
+              // Prioritize the Chinese Name (col1), fallback to English Name (col2)
+              let rawName = col1 || col2;
+              
+              // Strip out the (正) and (副) tags from the name text to make it clean
+              let cleanName = rawName.replace(/[(（](正|副)[)）]/g, '').trim();
+
+              // Skip if it's somehow just a stray number
+              if (!cleanName || cleanName.match(/^[0-9]+$/)) continue;
+
+              // Strictly allocate by position: 0 = Leader, 1 = Vice Leader, >1 = Members
+              if (memberIndex === 0) {
+                grouped[currentGroupName].leaders.push(cleanName + ' (Leader)');
+              } else if (memberIndex === 1) {
+                grouped[currentGroupName].leaders.push(cleanName + ' (Vice Leader)');
+              } else {
+                grouped[currentGroupName].members.push(cleanName);
+              }
+              
+              memberIndex++;
+            }
+          }
+
+          // 2. Render the UI Glass Cards
+          let html = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; width: 100%;">';
+          
+          // Sort groups naturally (Group 1, Group 2, ..., Group 10)
+          const sortedGroupNames = Object.keys(grouped).sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
+
+          sortedGroupNames.forEach(groupName => {
+            const data = grouped[groupName];
+            
+            html += `
+              <div class="glass-card" style="display: flex; flex-direction: column; gap: 16px; padding: 24px;">
+                <h3 style="color: var(--text-primary); border-bottom: 2px dashed var(--border-color); padding-bottom: 12px; margin: 0; font-size: 1.3rem;">
+                  ${groupName}
+                </h3>
+                
+                <!-- Leaders Section -->
+                <div style="background: rgba(255, 87, 34, 0.05); padding: 14px; border-radius: 12px; border: 1px solid rgba(255, 87, 34, 0.2);">
+                  <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--brand-orange); letter-spacing: 1px; margin-bottom: 8px;">
+                    👑 Group Leaders
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 6px;">
+                    ${data.leaders.length > 0 
+                      ? data.leaders.map(leader => `<div style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">${leader}</div>`).join('')
+                      : '<div style="font-size: 0.85rem; color: var(--brand-orange); font-style: italic;">No leaders assigned</div>'}
+                  </div>
+                </div>
+
+                <!-- Members Section -->
+                <div>
+                  <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-secondary); letter-spacing: 1px; margin-bottom: 8px;">
+                    👥 Group Members
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 6px;">
+                    ${data.members.length > 0 
+                      ? data.members.map(member => `
+                          <div style="font-size: 0.95rem; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
+                            <div style="width: 5px; height: 5px; background: var(--brand-blue); border-radius: 50%;"></div>
+                            ${member}
+                          </div>`).join('')
+                      : '<div style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">No members assigned</div>'}
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+          
+          html += '</div>';
+          container.innerHTML = html;
+        },
+        error: function() {
+          document.getElementById('groups-loading').innerText = "Failed to load groups data. Please check your connection.";
+        }
+      });
+    }
+
+    // --- Dynamic Countdown / Live Ticker Logic ---
+    setInterval(() => {
+      const now = new Date();
+      let currentEvent = null;
+
+      if (window.timelineEvents && window.timelineEvents.length > 0) {
+        for (let i = 0; i < window.timelineEvents.length; i++) {
+          const ev = window.timelineEvents[i];
+          // Assume event lasts until next event starts, or 1 hr default
+          const endTime = ev.end || (window.timelineEvents[i+1] && window.timelineEvents[i+1].start ? window.timelineEvents[i+1].start : new Date(ev.start.getTime() + 60*60*1000));
+          if (ev.start && now >= ev.start && now < endTime) {
+            currentEvent = ev;
+            break;
+          }
+        }
+      }
+
+      const cdView = document.getElementById('countdownView');
+      const tickerView = document.getElementById('liveTickerView');
+
+      if (currentEvent) {
+        cdView.style.display = 'none';
+        tickerView.style.display = 'flex';
+        document.getElementById('tickerActivity').textContent = currentEvent.activity;
+        document.getElementById('tickerVenue').textContent = currentEvent.venue ? `📍 ${currentEvent.venue}` : '📍 Youth Policy Lab';
+      } else {
+        const diff = EVENT_START.getTime() - now.getTime();
+        if (diff > 0) {
+          cdView.style.display = 'flex';
+          tickerView.style.display = 'none';
+          const pad = n => String(n).padStart(2, '0');
+          document.getElementById('cd-days').textContent = pad(Math.floor(diff / 86400000));
+          document.getElementById('cd-hours').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+          document.getElementById('cd-mins').textContent = pad(Math.floor((diff % 3600000) / 60000));
+          document.getElementById('cd-secs').textContent = pad(Math.floor((diff % 60000) / 1000));
+        } else {
+           cdView.style.display = 'none';
+           tickerView.style.display = 'flex';
+           document.getElementById('tickerActivity').textContent = "Event is Live!";
+           document.getElementById('tickerVenue').textContent = "Check timeline for next session";
+        }
+      }
+    }, 1000);
+
+    const searchInput = document.getElementById('searchInput');
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+
+    function applySearchAndFilter(query = '', filter = 'all') {
+      const viewport = document.getElementById('viewport');
+      query = query.toLowerCase().trim();
+      const isFiltering = query.length > 0 || filter !== 'all';
+      if (isFiltering) viewport.classList.add('filtered'); else viewport.classList.remove('filtered');
+
+      document.querySelectorAll('.room-block[data-room]').forEach(block => {
+        const roomNo = block.getAttribute('data-room');
+        const data = roomData[roomNo];
+        let match = false;
+
+        if (isFiltering) {
+          let textMatch = true;
+          if (query.length > 0) textMatch = data && data.occupants && data.occupants.some(o => o.name.toLowerCase().includes(query));
+
+          let filterMatch = true;
+          if (filter === 'vacant') filterMatch = !data || !data.occupants || data.occupants.length === 0;
+          else if (filter === 'vip') {
+            const isVipRemark = data && data.remarks && data.remarks.toLowerCase().includes('vip');
+            const isVipOccupant = data && data.occupants && data.occupants.some(o => (o.name && o.name.toLowerCase().includes('vip')) || (o.gender && o.gender.toLowerCase().includes('vip')));
+            filterMatch = isVipRemark || isVipOccupant;
+          } else if (filter === 'boys') filterMatch = data && data.occupants && data.occupants.some(o => { const g = (o.gender || '').toLowerCase(); return g.includes('boy') || g.includes('male') || g.includes('男') || g === 'm'; });
+          else if (filter === 'girls') filterMatch = data && data.occupants && data.occupants.some(o => { const g = (o.gender || '').toLowerCase(); return g.includes('girl') || g.includes('female') || g.includes('女') || g === 'f'; });
+
+          match = textMatch && filterMatch;
+          if (match) block.classList.add('highlight'); else block.classList.remove('highlight');
+        } else { block.classList.remove('highlight'); }
+      });
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      clearSearchBtn.style.display = e.target.value.length > 0 ? 'block' : 'none';
+      const activeBtn = document.querySelector('#dirToolsNav .filter-btn.active');
+      applySearchAndFilter(e.target.value, activeBtn ? activeBtn.getAttribute('data-filter') : 'all');
+    });
+
+    clearSearchBtn.addEventListener('click', () => {
+      searchInput.value = ''; clearSearchBtn.style.display = 'none';
+      const activeBtn = document.querySelector('#dirToolsNav .filter-btn.active');
+      applySearchAndFilter('', activeBtn ? activeBtn.getAttribute('data-filter') : 'all'); searchInput.focus();
+    });
+
+    document.querySelectorAll('#dirToolsNav .filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#dirToolsNav .filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active'); applySearchAndFilter(searchInput.value, btn.getAttribute('data-filter'));
+      });
+    });
+
+    // --- Desktop Tooltips & Mobile Click Popups ---
+    const tooltip = document.getElementById('tooltip');
+    
+    document.querySelectorAll('.room-block[data-room]').forEach(block => {
+      block.addEventListener('mousemove', (e) => {
+        if (window.innerWidth <= 768) return; 
+        if(block.parentElement.parentElement.parentElement.classList.contains('filtered') && !block.classList.contains('highlight')) return; 
+        const roomNo = block.getAttribute('data-room'); const data = roomData[roomNo];
+        if (data) {
+          tooltip.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><strong style="font-size:1.1rem; color:var(--text-primary); font-weight:700;">Room ${roomNo}</strong><span style="font-size:0.7rem; background:var(--surface-secondary); padding:3px 8px; border-radius:6px; color:var(--text-secondary); font-weight:600;">${data.type || 'Room'}</span></div><div style="border-top:1px solid rgba(0,0,0,0.05); padding-top:8px;"><div style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px; font-weight:600;">Occupants</div>${data.occupants.length > 0 ? data.occupants.map(occ => { const gLower = (occ.gender || '').toLowerCase(); const isBoy = gLower.includes('boy') || gLower.includes('male') || gLower.includes('男') || gLower === 'm'; return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;"><span style="font-weight:600; font-size:0.9rem; color:var(--text-primary);">${occ.name}</span><span style="font-size:0.7rem; color:${isBoy ? 'var(--brand-blue)' : 'var(--brand-orange)'}; font-weight:700;">${occ.gender}</span></div>`}).join('') : '<div style="color:var(--text-secondary); font-size:0.85rem; font-style:italic; font-weight:500;">No occupants assigned</div>'}</div>${data.remarks ? `<div style="margin-top:8px; background:rgba(255, 87, 34, 0.1); color:var(--brand-orange); font-size:0.75rem; font-weight:600; padding:4px 8px; border-radius:6px; display:inline-block; border:1px solid rgba(255, 87, 34, 0.2);">${data.remarks}</div>` : ''}<div class="click-hint">Click or press Enter to copy</div>`;
+        } else {
+          tooltip.innerHTML = `<strong style="font-size:1.1rem; color:var(--text-primary); font-weight:700;">Room ${roomNo}</strong><div style="color:var(--text-secondary); font-size:0.85rem; margin-top:6px; font-weight:500;">Vacant / Unassigned</div><div class="click-hint">Click or press Enter to copy</div>`;
+        }
+        tooltip.style.display = 'block'; tooltip.style.left = (e.clientX + 20) + 'px'; tooltip.style.top = (e.clientY + 20) + 'px';
+      });
+
+      block.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+
+      block.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+          if (navigator.vibrate) navigator.vibrate(15);
+          openRoomModal(block);
+        } else {
+          if (navigator.vibrate) navigator.vibrate(10);
+          triggerCopy(block);
+        }
+      });
+    });
+
+    function openRoomModal(block) {
+      if(block.parentElement.parentElement.parentElement.classList.contains('filtered') && !block.classList.contains('highlight')) return;
+      const roomNo = block.getAttribute('data-room');
+      const data = roomData[roomNo];
+      const contentDiv = document.getElementById('roomModalContent');
+      
+      let html = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"><strong style="font-size:1.2rem; color:var(--text-primary); font-weight:700;">Room ${roomNo}</strong><span style="font-size:0.75rem; background:var(--surface-secondary); padding:4px 10px; border-radius:8px; color:var(--text-secondary); font-weight:600;">${data && data.type ? data.type : 'Room'}</span></div>`;
+      html += `<div style="border-top:1px solid var(--border-color); padding-top:12px;"><div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px; font-weight:600;">Occupants</div>`;
+      
+      if (data && data.occupants && data.occupants.length > 0) {
+        html += data.occupants.map(occ => {
+          const gLower = (occ.gender || '').toLowerCase();
+          const isBoy = gLower.includes('boy') || gLower.includes('male') || gLower.includes('男') || gLower === 'm';
+          return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; padding:6px 8px; background:var(--surface-secondary); border-radius:8px;"><span style="font-weight:600; font-size:0.95rem; color:var(--text-primary);">${occ.name}</span><span style="font-size:0.75rem; color:${isBoy ? 'var(--brand-blue)' : 'var(--brand-orange)'}; font-weight:700;">${occ.gender}</span></div>`;
+        }).join('');
+      } else {
+        html += `<div style="color:var(--text-secondary); font-size:0.9rem; font-style:italic; font-weight:500; padding:10px 0;">No occupants assigned (Vacant)</div>`;
+      }
+      html += `</div>`;
+      
+      if (data && data.remarks) {
+        html += `<div style="margin-top:12px; background:rgba(255, 87, 34, 0.1); color:var(--brand-orange); font-size:0.8rem; font-weight:600; padding:8px 12px; border-radius:8px; border:1px solid rgba(255, 87, 34, 0.2);">${data.remarks}</div>`;
+      }
+      
+      contentDiv.innerHTML = html;
+      
+      const copyBtn = document.getElementById('roomModalCopyBtn');
+      copyBtn.onclick = () => {
+        triggerCopy(block);
+        closeRoomModal();
+      };
+      
+      document.getElementById('roomModalOverlay').classList.add('active');
+    }
+
+    function closeRoomModal() {
+      document.getElementById('roomModalOverlay').classList.remove('active');
+    }
+
+    function triggerCopy(block) {
+      if(block.parentElement.parentElement.parentElement.classList.contains('filtered') && !block.classList.contains('highlight')) return;
+      const roomNo = block.getAttribute('data-room'); const data = roomData[roomNo];
+      let textToCopy = `Room ${roomNo}\n`;
+      if (data && data.occupants && data.occupants.length > 0) {
+        textToCopy += `Type: ${data.type || 'Room'}\nOccupants:\n`;
+        data.occupants.forEach(o => { textToCopy += `- ${o.name} (${o.gender})\n`; });
+        if (data.remarks) textToCopy += `Remarks: ${data.remarks}`;
+      } else { textToCopy += `Status: Vacant`; }
+      navigator.clipboard.writeText(textToCopy).then(() => showToast(`Room ${roomNo} details copied!`));
+    }
+
+    // --- PACKING LIST & RULES LOGIC ---
+    function updatePackingProgress() {
+      const checkboxes = document.querySelectorAll('#tab-packing input[type="checkbox"]');
+      const checked = document.querySelectorAll('#tab-packing input[type="checkbox"]:checked');
+      const total = checkboxes.length; const count = checked.length;
+      const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+      
+      let titleSpan = document.getElementById('p-prog-title').outerHTML;
+      document.querySelector('.progress-header').innerHTML = titleSpan + `<span id="p-prog-val">${count} / ${total} (${pct}%)</span>`;
+      
+      document.getElementById('p-prog-fill').style.width = `${pct}%`;
+      const state = {}; checkboxes.forEach(chk => { state[chk.id] = chk.checked; });
+      localStorage.setItem('ypl_packing_checklist', JSON.stringify(state));
+    }
+    
+    const saved = localStorage.getItem('ypl_packing_checklist');
+    if (saved) {
+      try { const state = JSON.parse(saved); Object.keys(state).forEach(id => { const chk = document.getElementById(id); if (chk) chk.checked = state[id]; }); } catch (e) {}
+    }
+    document.querySelectorAll('#tab-packing input[type="checkbox"]').forEach(chk => { chk.addEventListener('change', updatePackingProgress); });
+    updatePackingProgress();
+
+    function resetPackingList() {
+      if (confirm('Reset all checkboxes?')) {
+        document.querySelectorAll('#tab-packing input[type="checkbox"]').forEach(chk => chk.checked = false);
+        updatePackingProgress(); showToast('Checklist reset!');
+      }
+    }
+
+    function toggleRuleCard(headerEl) { headerEl.parentElement.classList.toggle('active'); }
+    function togglePledge(chk) { localStorage.setItem('ypl_rules_pledge_signed', chk.checked ? '1' : '0'); if (chk.checked) showToast('Camp pledge signed digitally!'); }
+    
+    if (localStorage.getItem('ypl_rules_pledge_signed') === '1') { document.getElementById('chk_rules_pledge').checked = true; }
+
+    // Init Data
+    loadDirectoryData(); loadTimelineData(); loadGroupsData();
+    setInterval(() => { loadDirectoryData(); loadTimelineData(); loadGroupsData(); }, 60000);
+
+    // --- Splash Screen Standalone Timer ---
+    setInterval(() => {
+      if (!document.body.classList.contains('mode-splash')) return;
+      
+      const now = new Date();
+      const diff = EVENT_START.getTime() - now.getTime();
+      
+      if (diff > 0) {
+        const pad = n => String(n).padStart(2, '0');
+        document.getElementById('sp-days').textContent = pad(Math.floor(diff / 86400000));
+        document.getElementById('sp-hours').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+        document.getElementById('sp-mins').textContent = pad(Math.floor((diff % 3600000) / 60000));
+        document.getElementById('sp-secs').textContent = pad(Math.floor((diff % 60000) / 1000));
+      } else {
+         document.getElementById('sp-event-name').textContent = "Event is Live Now!";
+         document.getElementById('sp-cd-grid').style.display = 'none';
+      }
+    }, 1000);
+
+    // --- Ambient Background Music Logic ---
+    const bgMusic = document.getElementById('bg-music');
+    const audioToggle = document.getElementById('audio-toggle');
+
+    if (bgMusic && audioToggle) {
+      audioToggle.addEventListener('click', () => {
+        if (bgMusic.paused) {
+          bgMusic.play().then(() => {
+            audioToggle.classList.remove('muted');
+          }).catch(err => {
+            console.error("Audio playback blocked by browser:", err);
+          });
+        } else {
+          bgMusic.pause();
+          audioToggle.classList.add('muted');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
