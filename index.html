@@ -684,7 +684,7 @@
         <div style="background: var(--surface-secondary); padding: 15px; border-radius: 10px; text-align: center; font-weight: 700; letter-spacing: 1px; font-size: 1.2rem; margin-bottom: 10px;">
           Buer or The Only Space
         </div>
-        <button class="btn-primary" onclick="navigator.clipboard.writeText('buer6111'); showToast('Password copied!');" data-i18n="hub_wifi_btn">Copy Password</button>
+        <button class="btn-primary" onclick="navigator.clipboard.writeText('buer6111'); const btn=this; const originalText=btn.innerText; btn.innerText='Copied! ✅'; btn.style.background='var(--brand-green)'; setTimeout(()=>{btn.innerText=originalText; btn.style.background='var(--brand-blue)';}, 2000); showToast('Password copied!');" data-i18n="hub_wifi_btn">Copy Password</button>
       </div>
 
       <!-- Emergency SOS -->
@@ -1170,7 +1170,16 @@
     </div>
   </div>
   <!-- ================= 彈窗代碼結束 ================= -->
-
+<!-- ROOM DETAILS MOBILE MODAL (MISSING HTML ADDED) -->
+  <div id="roomModalOverlay" class="room-modal-overlay">
+    <div class="room-modal-card">
+      <div id="roomModalContent"></div>
+      <div style="display: flex; gap: 10px; margin-top: 16px;">
+        <button class="btn-primary" style="flex: 1; background: var(--surface-secondary); color: var(--text-primary); border: 1px solid var(--border-color);" onclick="closeRoomModal()">Close</button>
+        <button class="btn-primary" id="roomModalCopyBtn" style="flex: 1; background: var(--brand-blue);">Copy Details</button>
+      </div>
+    </div>
+  </div>
   <!-- Overlays -->
   <div id="tooltip"></div>
 
@@ -1462,7 +1471,12 @@
       bodyEl.innerHTML = '';
 
       try {
-        const response = await fetch(`${WORKER_URL}?range=${encodeURIComponent(range)}`);
+      let safeRange = range;
+      if (!safeRange.startsWith("'")) {
+          let parts = safeRange.split('!');
+          safeRange = `'${parts[0]}'!${parts[1]}`;
+      }
+      const response = await fetch(`${WORKER_URL}?range=${encodeURIComponent(safeRange)}`);
         const result = await response.json();
         if (result.error) throw new Error(result.error);
 
