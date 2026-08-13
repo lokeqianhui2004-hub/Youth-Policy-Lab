@@ -2077,27 +2077,21 @@ function loadGroupsData() {
       });
     });
 
-    function openRoomModal(block) {
+function openRoomModal(block) {
       const overlay = document.getElementById('roomModalOverlay');
       const content = document.getElementById('roomModalContent');
       const copyBtn = document.getElementById('roomModalCopyBtn');
 
-      if (!overlay || !content) {
-        alert("错误：找不到弹窗元件，请检查 HTML 骨架！");
-        return;
-      }
+      if (!overlay || !content) return;
 
-      // 抓取房间号码與裡面的文字內容
-      const roomNum = block.querySelector('div, span') ? block.querySelector('div, span').innerText : block.innerText;
-      const roomText = block.getAttribute('data-occupants') || block.innerHTML;
+      // 1. 尝试直接抓取电脑版原本使用的完整住户资讯 HTML
+      // （如果 block 裡面有詳細內容，就用它；如果沒有，才 fallback 抓房號）
+      let detailedHtml = block.innerHTML;
 
-      // 填充弹窗内容
+      // 填充进手机弹窗中
       content.innerHTML = `
-        <h3 style="color: var(--brand-blue); margin-bottom: 12px; font-size: 1.4rem; border-bottom: 2px solid var(--border-color); padding-bottom: 8px;">
-          🚪 Room ${roomNum} Details
-        </h3>
-        <div style="font-size: 1rem; color: var(--text-primary); line-height: 1.6; max-height: 50vh; overflow-y: auto;">
-          ${roomText}
+        <div style="font-size: 1rem; color: var(--text-primary); line-height: 1.6; max-height: 60vh; overflow-y: auto;">
+          ${detailedHtml}
         </div>
       `;
 
