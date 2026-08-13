@@ -2085,57 +2085,29 @@ function openRoomModal(block) {
       if (!overlay || !content) return;
 
       const roomNum = block.innerText.trim();
-      let details = "";
+      let occupantDetails = "";
 
-      // 1. 尝试在全域变数中寻找可能存放房间资料的物件（如 window.roomData, window.rooms, window.accommodation 等）
-      const possibleGlobals = ['roomData', 'rooms', 'roomMap', 'accommodation', 'lodgingData', 'globalRoomData'];
-      for (let gName of possibleGlobals) {
-        if (window[gName]) {
-          // 如果找到对应的全域变数，尝试从中捞出该房号的资料
-          let data = window[gName][roomNum] || window[gName][String(roomNum)];
-          if (data) {
-            details = typeof data === 'object' ? JSON.stringify(data, null, 2) : data;
-            break;
-          }
-        }
+      // 1. 让手机点下去时，主动模拟一次电脑版的悬停动作，或者直接把 tooltip 里的内容偷过来
+      // 触发格子自身的 mouseenter 事件，让电脑版的显示逻辑先跑一次
+      const mouseEvent = new MouseEvent('mouseenter', { view: window, bubbles: true, cancelable: true });
+      block.dispatchEvent(mouseEvent);
+
+      // 2. 马上抓取电脑版刚才产生出来的 tooltip 内容
+      const tooltipEl = document.getElementById('tooltip') || document.querySelector('.tooltip');
+      if (tooltipEl && tooltipEl.innerHTML.trim() !== '') {
+        occupantDetails = tooltipEl.innerHTML;
+      } else {
+        // 备用：如果抓不到，直接显示该房号
+        occupantDetails = `<div style="color: var(--text-secondary);">Room ${roomNum} (No occupant details found)</div>`;
       }
 
-      // 2. 如果全域变数找不到，尝试触发电脑版的 tooltip 机制并立刻拦截它的内容
-      if (!details) {
-        // 模拟滑鼠悬停，看看电脑版会把什么塞进 tooltip 容器
-        const tooltipEl = document.getElementById('tooltip') || document.querySelector('.tooltip');
-        if (tooltipEl) {
-          // 暂存原本的内容，触发 mouseenter
-          const oldDisplay = tooltipEl.style.display;
-          tooltipEl.style.display = 'block';
-          
-          // 尝试呼叫可能存在的显示函数
-          if (typeof showTooltip === 'function') {
-            try { showTooltip(roomNum, block); } catch(e) {}
-          } else {
-            const mouseEvent = new MouseEvent('mouseenter', { view: window, bubbles: true });
-            block.dispatchEvent(mouseEvent);
-          }
-
-          if (tooltipEl.innerHTML.trim() !== '') {
-            details = tooltipEl.innerHTML;
-          }
-          tooltipEl.style.display = oldDisplay;
-        }
-      }
-
-      // 3. 如果还是空，把格子本身的 HTML 拿来保底
-      if (!details || details === roomNum) {
-        details = block.innerHTML;
-      }
-
-      // 4. 秀在手机弹窗
+      // 3. 完美塞进手机弹窗
       content.innerHTML = `
         <div style="font-size: 1.2rem; font-weight: bold; color: var(--brand-blue); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px;">
-          Room ${roomNum}
+          Room ${roomNum} Details
         </div>
         <div style="font-size: 1rem; color: var(--text-primary); line-height: 1.6; max-height: 60vh; overflow-y: auto; text-align: left;">
-          ${details}
+          ${occupantDetails}
         </div>
       `;
 
