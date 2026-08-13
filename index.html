@@ -1183,8 +1183,8 @@
   <!-- Overlays -->
   <div id="tooltip"></div>
 
-  <!-- 房间详情的弹窗骨架 (Room Details Modal) -->
-  <div id="roomModalOverlay" class="room-modal-overlay">
+<!-- 房间详情弹窗 (Room Details Modal) -->
+  <div id="roomModalOverlay" class="room-modal-overlay" style="z-index: 10000;">
     <div class="room-modal-card">
       <div id="roomModalContent"></div>
       <div style="display: flex; gap: 10px; margin-top: 16px;">
@@ -2064,9 +2064,9 @@ function loadGroupsData() {
       block.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
 
       block.addEventListener('click', () => {
-        if (navigator.vibrate) navigator.vibrate(15);
-        openRoomModal(block); 
-        
+  if (navigator.vibrate) navigator.vibrate(15);
+  openRoomModal(block); // 无论手机或电脑，点击直接跳出弹窗
+});
         // 强制所有设备点击时，都跳出正中央的弹窗！
       });
     });
