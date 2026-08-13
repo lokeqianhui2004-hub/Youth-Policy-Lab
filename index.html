@@ -2078,44 +2078,53 @@ function loadGroupsData() {
     });
 
     function openRoomModal(block) {
-      if(block.parentElement.parentElement.parentElement.classList.contains('filtered') && !block.classList.contains('highlight')) return;
-      const roomNo = block.getAttribute('data-room');
-      const data = roomData[roomNo];
-      const contentDiv = document.getElementById('roomModalContent');
-      
-      let html = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"><strong style="font-size:1.2rem; color:var(--text-primary); font-weight:700;">Room ${roomNo}</strong><span style="font-size:0.75rem; background:var(--surface-secondary); padding:4px 10px; border-radius:8px; color:var(--text-secondary); font-weight:600;">${data && data.type ? data.type : 'Room'}</span></div>`;
-      html += `<div style="border-top:1px solid var(--border-color); padding-top:12px;"><div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px; font-weight:600;">Occupants</div>`;
-      
-      if (data && data.occupants && data.occupants.length > 0) {
-        html += data.occupants.map(occ => {
-          const gLower = (occ.gender || '').toLowerCase();
-          const isBoy = gLower.includes('boy') || gLower.includes('male') || gLower.includes('男') || gLower === 'm';
-          return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; padding:6px 8px; background:var(--surface-secondary); border-radius:8px;"><span style="font-weight:600; font-size:0.95rem; color:var(--text-primary);">${occ.name}</span><span style="font-size:0.75rem; color:${isBoy ? 'var(--brand-blue)' : 'var(--brand-orange)'}; font-weight:700;">${occ.gender}</span></div>`;
-        }).join('');
-      } else {
-        html += `<div style="color:var(--text-secondary); font-size:0.9rem; font-style:italic; font-weight:500; padding:10px 0;">No occupants assigned (Vacant)</div>`;
-      }
-      html += `</div>`;
-      
-      if (data && data.remarks) {
-        html += `<div style="margin-top:12px; background:rgba(255, 87, 34, 0.1); color:var(--brand-orange); font-size:0.8rem; font-weight:600; padding:8px 12px; border-radius:8px; border:1px solid rgba(255, 87, 34, 0.2);">${data.remarks}</div>`;
-      }
-      
-      contentDiv.innerHTML = html;
-      
+      const overlay = document.getElementById('roomModalOverlay');
+      const content = document.getElementById('roomModalContent');
       const copyBtn = document.getElementById('roomModalCopyBtn');
-      copyBtn.onclick = () => {
-        triggerCopy(block);
-        closeRoomModal();
-      };
-      
-      document.getElementById('roomModalOverlay').classList.add('active');
+
+      if (!overlay || !content) {
+        alert("错误：找不到弹窗元件，请检查 HTML 骨架！");
+        return;
+      }
+
+      // 抓取房间号码與裡面的文字內容
+      const roomNum = block.querySelector('div, span') ? block.querySelector('div, span').innerText : block.innerText;
+      const roomText = block.getAttribute('data-occupants') || block.innerHTML;
+
+      // 填充弹窗内容
+      content.innerHTML = `
+        <h3 style="color: var(--brand-blue); margin-bottom: 12px; font-size: 1.4rem; border-bottom: 2px solid var(--border-color); padding-bottom: 8px;">
+          🚪 Room ${roomNum} Details
+        </h3>
+        <div style="font-size: 1rem; color: var(--text-primary); line-height: 1.6; max-height: 50vh; overflow-y: auto;">
+          ${roomText}
+        </div>
+      `;
+
+      // 绑定复制按钮
+      if (copyBtn) {
+        copyBtn.onclick = () => {
+          navigator.clipboard.writeText(block.innerText);
+          copyBtn.innerText = "Copied! ✅";
+          copyBtn.style.background = "var(--brand-green)";
+          setTimeout(() => {
+            copyBtn.innerText = "Copy Details";
+            copyBtn.style.background = "var(--brand-blue)";
+          }, 2000);
+          showToast('Room details copied!');
+        };
+      }
+
+      // 强制开启弹窗
+      overlay.classList.add('active');
     }
 
     function closeRoomModal() {
-      document.getElementById('roomModalOverlay').classList.remove('active');
+      const overlay = document.getElementById('roomModalOverlay');
+      if (overlay) {
+        overlay.classList.remove('active');
+      }
     }
-
     function triggerCopy(block) {
       if(block.parentElement.parentElement.parentElement.classList.contains('filtered') && !block.classList.contains('highlight')) return;
       const roomNo = block.getAttribute('data-room'); const data = roomData[roomNo];
