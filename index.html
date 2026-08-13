@@ -1459,36 +1459,41 @@
       const headEl = document.getElementById('table-head');
       const bodyEl = document.getElementById('table-body');
 
-      // 1. If we already fetched this sheet, load it instantly from cache!
-      if (sheetCache[range]) {
-        renderTable(sheetCache[range].values, headEl, bodyEl);
+      // 🔥 终极防呆机制：自动帮所有表格名字加上单引号
+      let safeRange = range;
+      if (!safeRange.startsWith("'") && safeRange.includes("!")) {
+          let parts = safeRange.split('!');
+          safeRange = "'" + parts[0] + "'!" + parts[1]; // 强制转成 'Sheet Name'!A1:Z500 的标准格式
+      }
+
+      // 1. 如果快取有资料，直接载入
+      if (sheetCache[safeRange]) {
+        renderTable(sheetCache[safeRange].values, headEl, bodyEl);
         return; 
       }
 
-      // 2. Fetch from Cloudflare
+      // 2. 向 Cloudflare 发送请求
       loadingEl.style.display = 'block';
       headEl.innerHTML = '';
       bodyEl.innerHTML = '';
 
       try {
-      let safeRange = range;
-      if (!safeRange.startsWith("'")) {
-          let parts = safeRange.split('!');
-          safeRange = `'${parts[0]}'!${parts[1]}`;
-      }
-      const response = await fetch(`${WORKER_URL}?range=${encodeURIComponent(safeRange)}`);
+        const response = await fetch(`${WORKER_URL}?range=${encodeURIComponent(safeRange)}`);
         const result = await response.json();
-        if (result.error) throw new Error(result.error);
+        
+        // 捕捉错误并显示出真正的原因
+        if (result.error) {
+           throw new Error(result.error.message || JSON.stringify(result.error)); 
+        }
 
-        sheetCache[range] = result; 
+        sheetCache[safeRange] = result; 
         renderTable(result.values, headEl, bodyEl);
       } catch (err) {
-        alert("Error loading sheet data: " + err.message);
+        alert("🚨 无法载入表格资料，请检查 Google Sheets 分页名称是否完全正确：\n" + err.message);
       } finally {
         loadingEl.style.display = 'none';
       }
     }
-
     // Helper function to draw the table instantly
     function renderTable(rows, headEl, bodyEl) {
         if (!rows || rows.length === 0) {
