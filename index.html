@@ -2084,62 +2084,62 @@ function openRoomModal(block) {
 
       if (!overlay || !content) return;
 
-      // 1. 获取房号
-      const roomNum = block.getAttribute('data-room') || block.innerText.trim();
+      // 1. 获取当前点击的房间号 (例如 "303")
+      const roomNum = block.innerText.trim();
 
-      // 2. 核心关键：去抓取电脑版 tooltip 产生时所使用的 HTML 内容
-      // 电脑版的 tooltip 通常是一个叫 tooltip 的 DOM 元素，我们可以「借」它或读取它的生成逻辑
-      let cardHtml = "";
-      
-      const tooltipEl = document.getElementById('tooltip');
-      if (tooltipEl && tooltipEl.style.display !== 'none' && tooltipEl.innerHTML.trim() !== '') {
-        // 如果刚好 tooltip 有内容，直接借来用！
-        cardHtml = tooltipEl.innerHTML;
-      } else {
-        // 备用方案：如果 tooltip 没显示，我们模拟电脑版的卡片结构把房号跟内容组出来
-        // 尝试从 block 的 dataset 或内部找找看有没有藏住户资料
-        let occupantText = block.getAttribute('data-occupants') || block.title || "";
-        
-        cardHtml = `
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px;">
-            <span style="font-size: 1.3rem; font-weight: bold; color: var(--brand-blue);">Room ${roomNum}</span>
-          </div>
-          <div style="font-size: 1rem; color: var(--text-primary); line-height: 1.6;">
-            ${occupantText ? occupantText : block.innerHTML}
-          </div>
-        `;
+      // 2. 智慧侦测：尝试从网页上任何可能藏有该房间资料的地方挖出来
+      let details = "";
+
+      // 尝试方法 A：看 block 身上有没有现成的属性
+      details = block.getAttribute('data-occupants') || block.getAttribute('title') || "";
+
+      // 尝试方法 B：如果找不到，模拟电脑版触发一次 mouseenter/mouseover，看看电脑版会把什么资料塞进 tooltip
+      if (!details) {
+        // 暂时触发滑鼠进入事件，让原本的电脑版逻辑把内容跑出来
+        const mouseEvent = new MouseEvent('mouseenter', { view: window, bubbles: true, cancelable: true });
+        block.dispatchEvent(mouseEvent);
+
+        const tooltipEl = document.getElementById('tooltip');
+        if (tooltipEl && tooltipEl.innerHTML.trim() !== '') {
+          details = tooltipEl.innerHTML;
+        }
       }
 
-      // 3. 填充进手机弹窗中
+      // 尝试方法 C：如果还是空的，直接把 block 内部的所有 HTML 拿来用
+      if (!details || details === roomNum) {
+        details = block.innerHTML;
+      }
+
+      // 3. 完美秀在手机弹窗中央
       content.innerHTML = `
-        <div style="max-height: 60vh; overflow-y: auto; text-align: left;">
-          ${cardHtml}
+        <div style="font-size: 1.2rem; font-weight: bold; color: var(--brand-blue); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px;">
+          Room ${roomNum}
+        </div>
+        <div style="font-size: 1rem; color: var(--text-primary); line-height: 1.6; max-height: 60vh; overflow-y: auto; text-align: left;">
+          ${details}
         </div>
       `;
 
       // 绑定复制按钮
       if (copyBtn) {
         copyBtn.onclick = () => {
-          navigator.clipboard.writeText(block.innerText);
+          navigator.clipboard.writeText(roomNum);
           copyBtn.innerText = "Copied! ✅";
           copyBtn.style.background = "var(--brand-green)";
           setTimeout(() => {
             copyBtn.innerText = "Copy Details";
             copyBtn.style.background = "var(--brand-blue)";
           }, 2000);
-          showToast('Room details copied!');
+          showToast('Room number copied!');
         };
       }
 
-      // 强制开启手机弹窗
       overlay.classList.add('active');
     }
 
     function closeRoomModal() {
       const overlay = document.getElementById('roomModalOverlay');
-      if (overlay) {
-        overlay.classList.remove('active');
-      }
+      if (overlay) overlay.classList.remove('active');
     }
     function triggerCopy(block) {
       if(block.parentElement.parentElement.parentElement.classList.contains('filtered') && !block.classList.contains('highlight')) return;
