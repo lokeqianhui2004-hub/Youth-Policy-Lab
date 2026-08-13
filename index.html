@@ -1806,48 +1806,50 @@ function loadGroupsData() {
           const rawData = results.data;
           window.globalGroupData = {}; 
           const grouped = window.globalGroupData;
-          let currentGroupName = null;
+          
+          let pendingLeaders = []; // 暂存领队名字，等看到 Group 名字时再自动打包进去
 
           for (let i = 0; i < rawData.length; i++) {
             const row = rawData[i];
-            const col0 = row[0] ? row[0].trim() : ''; 
-            const col1 = row[1] ? row[1].trim() : ''; 
-            const col2 = row[2] ? row[2].trim() : ''; 
-            
-            // 抓取组别名称 (排除掉写着 Group Name 或乱码的行)
-            let combinedText = (col0 + " " + col1).toLowerCase();
-            if (combinedText.includes('group') && !combinedText.includes('name')) {
-              let groupString = col0.toLowerCase().includes('group') ? col0 : col1;
-              currentGroupName = groupString.split('(')[0].trim(); 
-              if (currentGroupName && currentGroupName.toLowerCase() !== 'group name') {
-                if (!grouped[currentGroupName]) {
-                  grouped[currentGroupName] = { leaders: [], members: [] };
+            const col0 = row[0] ? row[0].trim() : ''; // A栏
+            const col1 = row[1] ? row[1].trim() : ''; // B栏：中文名字
+            const col2 = row[2] ? row[2].trim() : ''; // C栏：英文名字
+
+            // 1. 如果 A 栏写着 "领队"，先把名字暂存起来
+            if (col0 === '领队') {
+              let rawName = col1 || col2;
+              let cleanName = rawName.replace(/[(（](正|副)[)）]/g, '').trim();
+              if (cleanName) {
+                if (rawName.includes('副')) {
+                  pendingLeaders.push(cleanName + ' (Vice Leader)');
+                } else {
+                  pendingLeaders.push(cleanName + ' (Leader)');
                 }
-              } else {
-                currentGroupName = null;
               }
               continue;
             }
 
-            // 跳过无效標題行
-            if (col1 === '名字' || col2 === 'Name' || col1.toLowerCase() === 'name') continue;
+            // 2. 如果 A 栏写着 Group 几
+            let lowerCol0 = col0.toLowerCase();
+            if (lowerCol0.includes('group')) {
+              let groupName = col0.split('(')[0].trim();
+              if (groupName.toLowerCase() !== 'group name') {
+                if (!grouped[groupName]) {
+                  // 顺便把刚刚暂存的领队直接塞进这一组
+                  grouped[groupName] = { leaders: [...pendingLeaders], members: [] };
+                } else {
+                  grouped[groupName].leaders.push(...pendingLeaders);
+                }
+                pendingLeaders = []; // 清空暂存池，准备迎接下一组
 
-            if (currentGroupName && (col1 || col2)) {
-              let rawName = col1 || col2;
-              let cleanName = rawName.replace(/[(（](正|副)[)）]/g, '').trim();
-              if (!cleanName || cleanName.match(/^[0-9]+$/) || cleanName.toLowerCase() === 'name') continue;
-
-              // 👑 智能辨识身分：看有没有包含「正/副/Leader/Vice」关键字
-              let lowerOriginal = (rawName + " " + col0).toLowerCase();
-              
-              if (lowerOriginal.includes('正') || lowerOriginal.includes('leader') || lowerOriginal.includes('组长') || lowerOriginal.includes('队长')) {
-                grouped[currentGroupName].leaders.push(cleanName + ' (Leader)');
-              } else if (lowerOriginal.includes('副') || lowerOriginal.includes('vice')) {
-                grouped[currentGroupName].leaders.push(cleanName + ' (Vice Leader)');
-              } else {
-                // 如果没有写正副，默认就是普通组员！
-                grouped[currentGroupName].members.push(cleanName);
+                // 把这一行的组员加进去
+                let rawName = col1 || col2;
+                let cleanName = rawName.replace(/[(（](正|副)[)）]/g, '').trim();
+                if (cleanName && cleanName !== '名字' && cleanName.toLowerCase() !== 'name' && !cleanName.match(/^[0-9]+$/)) {
+                  grouped[groupName].members.push(cleanName);
+                }
               }
+              continue;
             }
           }
 
@@ -1890,6 +1892,7 @@ function loadGroupsData() {
           document.getElementById('groups-loading').innerText = "Failed to load groups data. Please check your connection.";
         }
       });
+    }
     }
 
           let html = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; width: 100%;">';
