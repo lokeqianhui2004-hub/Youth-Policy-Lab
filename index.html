@@ -1795,7 +1795,7 @@ function loadGroupsData() {
       Papa.parse(GROUPS_CSV_URL, {
         download: true, 
         header: false,
-        skipEmptyLines: false, // 允许读取空行作为区隔
+        skipEmptyLines: true,
         complete: function(results) { 
           const container = document.getElementById('groups-container');
           if (results.data.length === 0) {
@@ -1807,7 +1807,7 @@ function loadGroupsData() {
           window.globalGroupData = {}; 
           const grouped = window.globalGroupData;
           
-          let pendingLeaders = []; // 暂存区：先把领队存起来
+          let tempLeaders = []; // 暂存区：专门用来接每一组上面的领队名字
 
           for (let i = 0; i < rawData.length; i++) {
             const row = rawData[i];
@@ -1815,7 +1815,7 @@ function loadGroupsData() {
             const col1 = row[1] ? row[1].trim() : ''; // B 栏：中文名字
             const col2 = row[2] ? row[2].trim() : ''; // C 栏：英文名字
 
-            // 智慧组合中英文名字 (例如: 张贝沂 (正) (Becky Chong Bei Yi))
+            // 智慧结合中英文名字 (例如: 张贝沂 (正) (Becky Chong Bei Yi))
             let fullName = "";
             if (col1 && col2) {
               fullName = `${col1} (${col2})`;
@@ -1823,31 +1823,36 @@ function loadGroupsData() {
               fullName = col1 || col2;
             }
 
-            // 1. 如果 A 栏写着 "领队"，把名字暂存起来
+            if (!col0 && !fullName) continue;
+
+            // 1. 如果 A 栏写着 "领队"，先把名字存进暂存区
             if (col0 === '领队' || col0.includes('领队')) {
               if (fullName && fullName !== '名字' && fullName.toLowerCase() !== 'name') {
-                pendingLeaders.push(fullName);
+                tempLeaders.push(fullName);
               }
               continue;
             }
 
-            // 2. 如果 A 栏写着 Group 几 (例如 Group 3)
+            // 2. 如果 A 栏写着 Group 几 (例如 Group 1, Group 2...)
             let lowerCol0 = col0.toLowerCase();
             if (lowerCol0.includes('group')) {
               let groupName = col0.split('(')[0].trim();
               
-              // 排除表格顶部的标题 "Group Name"
+              // 排除表格顶部的标题行 "Group Name"
               if (groupName.toLowerCase() === 'group name' || groupName.toLowerCase() === 'group name ') {
                 continue;
               }
 
-              // 如果这一组还没建立过，建立它并把刚才暂存的领队一次性塞进去！
+              // 如果这一组还没在清单里建立过，就建立它，并把刚才暂存的领队一次性塞进去！
               if (!grouped[groupName]) {
-                grouped[groupName] = { leaders: [...pendingLeaders], members: [] };
-                pendingLeaders = []; // 领队用完后清空，留给下一组
+                grouped[groupName] = { 
+                  leaders: [...tempLeaders], 
+                  members: [] 
+                };
+                tempLeaders = []; // 领队用完后立刻清空，留给下一组
               }
 
-              // 把这一行的组员名字加进该组的 members
+              // 把这一行的普通组员名字加进该组的 members
               if (fullName && fullName !== '名字' && fullName.toLowerCase() !== 'name' && !fullName.match(/^[0-9]+$/)) {
                 if (!grouped[groupName].members.includes(fullName)) {
                   grouped[groupName].members.push(fullName);
@@ -1895,7 +1900,6 @@ function loadGroupsData() {
           document.getElementById('groups-loading').innerText = "Failed to load groups data. Please check your connection.";
         }
       });
-    }
     }
 
           let html = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; width: 100%;">';
