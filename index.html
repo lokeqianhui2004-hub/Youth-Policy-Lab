@@ -1795,7 +1795,7 @@ function loadGroupsData() {
       Papa.parse(GROUPS_CSV_URL, {
         download: true, 
         header: false,
-        skipEmptyLines: true,
+        skipEmptyLines: false, // 允许读取空行作为区隔
         complete: function(results) { 
           const container = document.getElementById('groups-container');
           if (results.data.length === 0) {
@@ -1807,49 +1807,52 @@ function loadGroupsData() {
           window.globalGroupData = {}; 
           const grouped = window.globalGroupData;
           
-          let pendingLeaders = []; // 暂存领队名字，等看到 Group 名字时再自动打包进去
+          let pendingLeaders = []; // 暂存区：先把领队存起来
 
           for (let i = 0; i < rawData.length; i++) {
             const row = rawData[i];
-            const col0 = row[0] ? row[0].trim() : ''; // A栏
-            const col1 = row[1] ? row[1].trim() : ''; // B栏：中文名字
-            const col2 = row[2] ? row[2].trim() : ''; // C栏：英文名字
+            const col0 = row[0] ? row[0].trim() : ''; // A 栏：领队 或 Group X
+            const col1 = row[1] ? row[1].trim() : ''; // B 栏：中文名字
+            const col2 = row[2] ? row[2].trim() : ''; // C 栏：英文名字
 
-            // 1. 如果 A 栏写着 "领队"，先把名字暂存起来
-            if (col0 === '领队') {
-              let rawName = col1 || col2;
-              let cleanName = rawName.replace(/[(（](正|副)[)）]/g, '').trim();
-              if (cleanName) {
-                if (rawName.includes('副')) {
-                  pendingLeaders.push(cleanName + ' (Vice Leader)');
-                } else {
-                  pendingLeaders.push(cleanName + ' (Leader)');
-                }
+            // 智慧组合中英文名字 (例如: 张贝沂 (正) (Becky Chong Bei Yi))
+            let fullName = "";
+            if (col1 && col2) {
+              fullName = `${col1} (${col2})`;
+            } else {
+              fullName = col1 || col2;
+            }
+
+            // 1. 如果 A 栏写着 "领队"，把名字暂存起来
+            if (col0 === '领队' || col0.includes('领队')) {
+              if (fullName && fullName !== '名字' && fullName.toLowerCase() !== 'name') {
+                pendingLeaders.push(fullName);
               }
               continue;
             }
 
-            // 2. 如果 A 栏写着 Group 几
+            // 2. 如果 A 栏写着 Group 几 (例如 Group 3)
             let lowerCol0 = col0.toLowerCase();
             if (lowerCol0.includes('group')) {
               let groupName = col0.split('(')[0].trim();
-              if (groupName.toLowerCase() !== 'group name') {
-                if (!grouped[groupName]) {
-                  // 顺便把刚刚暂存的领队直接塞进这一组
-                  grouped[groupName] = { leaders: [...pendingLeaders], members: [] };
-                } else {
-                  grouped[groupName].leaders.push(...pendingLeaders);
-                }
-                pendingLeaders = []; // 清空暂存池，准备迎接下一组
+              
+              // 排除表格顶部的标题 "Group Name"
+              if (groupName.toLowerCase() === 'group name' || groupName.toLowerCase() === 'group name ') {
+                continue;
+              }
 
-                // 把这一行的组员加进去
-                let rawName = col1 || col2;
-                let cleanName = rawName.replace(/[(（](正|副)[)）]/g, '').trim();
-                if (cleanName && cleanName !== '名字' && cleanName.toLowerCase() !== 'name' && !cleanName.match(/^[0-9]+$/)) {
-                  grouped[groupName].members.push(cleanName);
+              // 如果这一组还没建立过，建立它并把刚才暂存的领队一次性塞进去！
+              if (!grouped[groupName]) {
+                grouped[groupName] = { leaders: [...pendingLeaders], members: [] };
+                pendingLeaders = []; // 领队用完后清空，留给下一组
+              }
+
+              // 把这一行的组员名字加进该组的 members
+              if (fullName && fullName !== '名字' && fullName.toLowerCase() !== 'name' && !fullName.match(/^[0-9]+$/)) {
+                if (!grouped[groupName].members.includes(fullName)) {
+                  grouped[groupName].members.push(fullName);
                 }
               }
-              continue;
             }
           }
 
